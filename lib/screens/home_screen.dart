@@ -1,14 +1,12 @@
 import 'package:diamond_app/database/database_helper.dart';
 import 'package:diamond_app/database/diamond_data.dart';
 import 'package:diamond_app/features/spotrate_widget.dart';
-
 import 'package:diamond_app/main.dart';
 import 'package:diamond_app/screens/certificate_generate_screen.dart';
 import 'package:diamond_app/utils/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -247,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            CertificateGenerate(),
+                                            CertificateGeneratePage(),
                                       ),
                                     );
                                   }),
@@ -283,7 +281,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CertificateGenerate(),
+                                  builder: (context) =>
+                                      CertificateGeneratePage(),
                                 ),
                               );
                             }),
