@@ -12,4 +12,5 @@ class AppColors {
   static Color whitegrey = Color(0xffC3C2C2);
   static Color grey = Color(0xff918F8F);
   static Color greychat = Color(0xffE8E8E8);
+  static Color primaryAppColor = Color.fromARGB(255, 255, 136, 56);
 }
