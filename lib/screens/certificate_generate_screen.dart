@@ -116,7 +116,6 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
       var response = await http.get(Uri.parse(url));
       if (Platform.isAndroid) {
         await Permission.storage.request();
-        await Permission.manageExternalStorage.request();
       } else {
         await Permission.storage.request();
       }
@@ -139,9 +138,9 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
             ),
           ],
           content: NotificationContent(
-            payload: {'basic_channel': dir.path, 'file': fileName},
+            payload: {'PDF_Downloader': dir.path, 'file': fileName},
             id: 1,
-            channelKey: "basic_channel",
+            channelKey: "PDF_Downloader",
             title: "Certificate Downloaded",
             body: "PDF has been downloaded successfully in Download Folder",
           ),
@@ -255,13 +254,13 @@ class NotificationController {
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-    // if (receivedAction.buttonKeyPressed == 'OPEN') {
-    //   String? basicChannel = receivedAction.payload!['basic_channel'];
-    //   String? fileName = receivedAction.payload!['file'];
-    //   if (basicChannel != null && fileName != null) {
-    //     String filePath = basicChannel + '/' + fileName;
-    //     OpenFile.open(filePath);
-    //   }
-    // }
+    if (receivedAction.buttonKeyPressed == 'OPEN') {
+      String? basicChannel = receivedAction.payload!['PDF_Downloader'];
+      String? fileName = receivedAction.payload!['file'];
+      if (basicChannel != null && fileName != null) {
+        String filePath = basicChannel + '/' + fileName;
+        OpenFile.open(filePath);
+      }
+    }
   }
 }

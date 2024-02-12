@@ -3,22 +3,26 @@ import 'package:diamond_app/database/database_helper.dart';
 import 'package:diamond_app/database/diamond_data.dart';
 import 'package:diamond_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqlite_api.dart';
+import 'package:diamond_app/utils/app_colors.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await _requestStoragePermission();
+  await Permission.manageExternalStorage.request();
   await AwesomeNotifications().initialize(null, [
     NotificationChannel(
       channelGroupKey: "basic_channel_group",
-      channelKey: "basic_channel",
-      channelName: "Basic Notification",
+      channelKey: "PDF_Downloader",
+      channelName: "Download",
       channelDescription: "Basic notifications channel",
     )
   ], channelGroups: [
     NotificationChannelGroup(
       channelGroupKey: "basic_channel_group",
-      channelGroupName: "Basic Group",
+      channelGroupName: "Download",
     )
   ]);
   bool isAllowedToSendNotification =
@@ -27,6 +31,28 @@ Future main() async {
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
   runApp(const MyApp());
+}
+
+Future<void> _requestStoragePermission() async {
+  if (!(await Permission.storage.status.isGranted)) {
+    await Permission.manageExternalStorage.request();
+    PermissionStatus permissionStatus = await Permission.storage.request();
+    if (permissionStatus.isPermanentlyDenied) {
+      openAppSettings();
+    }
+    // You can customize the permission request message here
+    if (await Permission.storage.shouldShowRequestRationale) {
+      await Permission.storage.request();
+
+      if (await Permission.storage.status.isPermanentlyDenied) {
+        openAppSettings();
+      }
+    }
+    await Permission.storage.request();
+    if (await Permission.storage.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -40,7 +66,7 @@ class MyApp extends StatelessWidget {
       // themeMode: uselightMode ? ThemeMode.light : ThemeMode.dark,
       theme: ThemeData(
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        colorSchemeSeed: Colors.green,
+        colorSchemeSeed: AppColors.primaryAppColor,
         useMaterial3: true,
       ),
       //brightness: Brightness.dark),

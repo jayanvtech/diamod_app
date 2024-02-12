@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:diamond_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:intl/intl.dart';
@@ -38,7 +39,7 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
     fetchData();
 
     // Set up a timer for automatic refresh every 60 seconds
-    timer = Timer.periodic(Duration(seconds: 20), (Timer t) => fetchData());
+    timer = Timer.periodic(Duration(seconds: 30), (Timer t) => fetchData());
     timer;
   }
 
@@ -81,6 +82,7 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             elevation: 0,
+            duration: Duration(seconds: 2),
             backgroundColor: Colors.transparent,
             behavior: SnackBarBehavior.floating,
             content: Container(
@@ -118,8 +120,12 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
     List<SpotRate> selectedSpotRates =
         spotRates.where((spot) => spot.name == selectedCurrency).toList();
 
-    return Scaffold(
-      body: Column(
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.primaryAppColor.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (selectedSpotRates.isNotEmpty)
@@ -127,122 +133,135 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.blue),
                   borderRadius: BorderRadius.circular(10)),
-              child: Card(
-                elevation: 0,
-                color: Colors.white,
-                shadowColor: Colors.transparent,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 1, 10, 10),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Select Currency",
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0),
-                            ),
-                            DropdownButton<String>(
-                              icon: Icon(Icons.arrow_drop_down),
-                              borderRadius: BorderRadius.circular(16),
-                              value: selectedCurrency,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedCurrency = newValue!;
-                                });
-                              },
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 16.0,
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            " ",
+                            style: TextStyle(
+                                color: AppColors.primaryAppColor,
                                 fontWeight: FontWeight.bold,
-                              ),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.blue,
-                              ),
-                              items: spotRates.map<DropdownMenuItem<String>>(
-                                  (SpotRate spot) {
-                                return DropdownMenuItem<String>(
-                                  value: spot.name,
-                                  child: Text(
-                                    spot.name,
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                fontSize: 16.0),
+                          ),
+                          DropdownButton<String>(
+                            icon: Icon(Icons.arrow_drop_down),
+                            borderRadius: BorderRadius.circular(16),
+                            value: selectedCurrency,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedCurrency = newValue!;
+                              });
+                            },
+                            style: TextStyle(
+                              color: AppColors.primaryAppColor,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            underline: Container(
+                              height: 2,
+                              color: AppColors.primaryAppColor,
+                            ),
+                            items: spotRates
+                                .map<DropdownMenuItem<String>>((SpotRate spot) {
+                              return DropdownMenuItem<String>(
+                                value: spot.name,
+                                child: Text(
+                                  spot.name,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                );
-                              }).toList(),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+
+                      Container(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(selectedSpotRates[0].name,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                                Row(
+                                  children: [
+                                    Text(selectedSpotRates[0].ltp,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+
+                                    // Text(lastUpdated.toLocal().toString().characters.take(5).toString(),
+                                    // Text(selectedSpotRates[0]
+                                    //     .time
+                                    //     . //toString().characters.take(5).toString(),
+                                    //     substring(11, 19)),
+                                    // Text(
+                                    //   DateFormat.Hms().format(DateTime.now()),
+                                    // )
+                                  ],
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Last Changed: ",
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                    Text(
+                                      selectedSpotRates[0]
+                                          .time
+                                          .substring(11, 19),
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(""),
+                                    Text(
+                                      selectedSpotRates[0].chg,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
                           ],
                         ),
-
-                        Container(
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(selectedSpotRates[0].name),
-                                  Row(
-                                    children: [
-                                      Text("Last Updated: "),
-
-                                      // Text(lastUpdated.toLocal().toString().characters.take(5).toString(),
-                                      Text(selectedSpotRates[0]
-                                          .time
-                                          . //toString().characters.take(5).toString(),
-                                          substring(11, 19)),
-                                      // Text(
-                                      //   DateFormat.Hms().format(DateTime.now()),
-                                      // )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text("Price: "),
-                                      Text(selectedSpotRates[0].ltp),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Change: "),
-                                      Text(selectedSpotRates[0].chg)
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        // ListTile(
-                        //   title: Text(selectedSpotRates[0].name),
-                        //   subtitle: Text(
-                        //       'Price: ${selectedSpotRates[0].ltp}, Change: ${selectedSpotRates[0].chg}'),
-                        //   trailing:
-                        //       Text('Updated: ${selectedSpotRates[0].time}'),
-                        // ),
-                      ],
-                    ),
+                      ),
+                      // ListTile(
+                      //   title: Text(selectedSpotRates[0].name),
+                      //   subtitle: Text(
+                      //       'Price: ${selectedSpotRates[0].ltp}, Change: ${selectedSpotRates[0].chg}'),
+                      //   trailing:
+                      //       Text('Updated: ${selectedSpotRates[0].time}'),
+                      // ),
+                    ],
                   ),
                 ),
               ),
             ),
-          SizedBox(height: 20),
           if (errorMessage != null)
             SizedBox(
-              height: 20,
               child: Text(
                 errorMessage!,
                 style: TextStyle(color: Colors.red),

@@ -72,17 +72,35 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Home')),
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          title: Text('Home'),
+          backgroundColor: AppColors.primaryAppColor.withOpacity(0.01),
+        ),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(15),
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primaryAppColor
+                      .withOpacity(0.000000000000000000001),
+                  AppColors.white2,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Form(
               key: formKey,
               child: Column(
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: AppColors.primaryAppColor.withOpacity(0.12),
                       border: Border.all(
                           color: const Color.fromARGB(0, 158, 158, 158)),
                       borderRadius: BorderRadius.circular(10),
@@ -97,9 +115,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.bold,
                           color: AppColors.black),
                       decoration: InputDecoration(
+                          prefixIconColor: AppColors.primaryAppColor,
                           labelText: 'Carat',
                           prefixIcon: Icon(Icons.diamond),
                           suffixText: "Ct.",
+                          suffixIconColor: AppColors.primaryAppColor,
                           suffixIcon: IconButton(
                             icon: Icon(Icons.delete_forever),
                             onPressed: () {
@@ -178,13 +198,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Container(
                               decoration: BoxDecoration(
-                                  color: Colors.grey[100],
+                                  color: AppColors.primaryAppColor
+                                      .withOpacity(0.12),
                                   border: Border.all(
                                       color: const Color.fromARGB(
                                           0, 158, 158, 158)),
                                   borderRadius: BorderRadius.circular(10)),
                               child: _buildPriceTextField(
-                                  "Price", priceController)),
+                                  "Price", priceController, context)),
                           Container(
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(22, 255, 0, 0),
@@ -205,10 +226,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                                color: Colors.grey[100],
+                                color:
+                                    AppColors.primaryAppColor.withOpacity(0.12),
                                 border: Border.all(
-                                    color:
-                                        const Color.fromARGB(0, 158, 158, 158)),
+                                    color: Color.fromARGB(0, 255, 0, 0)),
                                 borderRadius: BorderRadius.circular(10)),
                             child: _buildDiscountPriceTextField(
                                 "Discount Price", priceController),
@@ -223,45 +244,40 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 20,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 50,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: ElevatedButton.icon(
-                                  icon: const Icon(Icons.share),
-                                  label: const Text('Share'),
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    backgroundColor: Colors.black,
-                                    elevation: 0,
-                                    //primary: Colors.blue,
+                        width: MediaQuery.of(context).size.width,
+                        child: Container(
+                          height: 50,
+                          child: ElevatedButton.icon(
+                              icon: const Icon(Icons.share),
+                              label: const Text('Share'),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                backgroundColor: AppColors.primaryAppColor,
+                                elevation: 0,
+                                //primary: Colors.blue,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        CertificateGeneratePage(),
                                   ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            CertificateGeneratePage(),
-                                      ),
-                                    );
-                                  }),
-                            ),
-                          ],
+                                );
+                              }),
                         ),
                       ),
                       SizedBox(
                         height: 20,
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.172,
+                        height: 102,
                         child: SpotrateWidget(),
                       ),
                       SizedBox(
-                        height: 0,
+                        height: 10,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.9,
@@ -274,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 elevation: 0,
-                                primary: Colors.black,
+                                primary: AppColors.primaryAppColor,
                                 disabledBackgroundColor:
                                     Color.fromARGB(255, 76, 0, 255)),
                             onPressed: () {
@@ -303,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
         TextEditingController(text: totalPrice.toString());
 
     return Container(
-      width: 160,
+      width: MediaQuery.of(context).size.width * 0.4,
       child: TextFormField(
         textAlign: TextAlign.start,
         readOnly: true,
@@ -322,11 +338,11 @@ class _HomeScreenState extends State<HomeScreen> {
           suffixStyle: TextStyle(fontSize: 12),
           labelStyle: TextStyle(fontSize: 12),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green),
+            borderSide: BorderSide(color: AppColors.primaryAppColor),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green),
+            borderSide: BorderSide(color: AppColors.primaryAppColor),
             borderRadius: BorderRadius.circular(10),
           ),
         ),
@@ -341,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
         TextEditingController(text: totalPrice.toString());
 
     return Container(
-      width: 160,
+      width: MediaQuery.of(context).size.width * 0.4,
       child: TextFormField(
         textAlign: TextAlign.start,
         readOnly: true,
@@ -360,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
           suffixStyle: TextStyle(fontSize: 12),
           labelStyle: TextStyle(fontSize: 12),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green),
+            borderSide: BorderSide(color: AppColors.primaryAppColor),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
@@ -398,7 +414,7 @@ class _HomeScreenState extends State<HomeScreen> {
         TextEditingController(text: value.toStringAsFixed(1));
 
     return Container(
-      width: 160,
+      width: MediaQuery.of(context).size.width * 0.4,
       child: TextFormField(
         textAlignVertical: TextAlignVertical.center,
         textAlign: TextAlign.end,
@@ -413,14 +429,25 @@ class _HomeScreenState extends State<HomeScreen> {
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         onChanged: (value) {
           double discount = double.tryParse(value) ?? 0.0;
-          setState(() {
-            selectedDiscountIndex = discount;
-            _updatePrice();
-          });
+          selectedDiscountIndex = discount; // Update selectedDiscountIndex
+          _updatePrice();
         },
         decoration: InputDecoration(
           labelText: title,
-          prefix: Text(' - '),
+          prefixIcon: IconButton(
+            onPressed: () {
+              // Change the sign of the discount value
+              setState(() {
+                selectedDiscountIndex = -selectedDiscountIndex;
+                discountController.text =
+                    selectedDiscountIndex.toStringAsFixed(1);
+                _updatePrice();
+              });
+            },
+            icon: Icon(selectedDiscountIndex >= 0 ? Icons.add : Icons.remove),
+            // Change the icon based on the sign of the discount value
+            color: AppColors.primaryAppColor,
+          ),
           labelStyle: TextStyle(fontSize: 12),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.red),
@@ -436,9 +463,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-Widget _buildPriceTextField(String title, TextEditingController controller) {
+Widget _buildPriceTextField(
+    String title, TextEditingController controller, BuildContext context) {
   return Container(
-    width: 160,
+    width: MediaQuery.of(context).size.width * 0.4,
     child: TextFormField(
       readOnly: true,
       textAlignVertical: TextAlignVertical.center,
@@ -476,6 +504,11 @@ Widget _buildPriceTextField(String title, TextEditingController controller) {
 }
 
 Widget _buildDiscountSelector(String title, ValueChanged<double> onChanged) {
+  int selectedIndex = (selectedDiscountIndex * 10).toInt() +
+      100; // Calculate the selected index for CupertinoPicker
+  bool isNegative =
+      selectedDiscountIndex < 0; // Check if selected discount is negative
+
   return Expanded(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -485,31 +518,35 @@ Widget _buildDiscountSelector(String title, ValueChanged<double> onChanged) {
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: const Color.fromARGB(255, 0, 0, 0)),
+              color: AppColors.primaryAppColor),
         ),
         Container(
           height: 120,
           child: CupertinoPicker(
+            scrollController:
+                FixedExtentScrollController(initialItem: selectedIndex),
             itemExtent: 40,
             onSelectedItemChanged: (index) {
               double discount = (index - 100) / 1.0;
               onChanged(discount);
             },
-
-            // looping: bool.fromEnvironment("true"),
             children: List.generate(201, (index) {
               double discount = (index - 100) / 1.0;
+              // Adjust the discount value based on whether it's negative or positive
+              if (isNegative) {
+                discount = -discount;
+              }
               return Center(
                 child: Text(
                   '${discount.toStringAsFixed(1)}%',
                   style: TextStyle(
                     fontSize: 16,
-                    color: discount == selectedDiscountIndex
-                        ? Colors.red
-                        : Colors.black,
                     fontWeight: discount == selectedDiscountIndex
                         ? FontWeight.bold
                         : FontWeight.normal,
+                    color: discount == selectedDiscountIndex
+                        ? Colors.red
+                        : Colors.black,
                   ),
                 ),
               );
@@ -542,7 +579,10 @@ Widget _buildSelector(String title, List<String> items, int selectedIndex,
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primaryAppColor),
         ),
         Container(
           height: 120,
@@ -554,6 +594,9 @@ Widget _buildSelector(String title, List<String> items, int selectedIndex,
                 child: Text(
                   item,
                   style: TextStyle(
+                    color: selectedIndex == items.indexOf(item)
+                        ? AppColors.primaryAppColor
+                        : Colors.black,
                     fontSize: 16,
                     fontWeight: selectedIndex == items.indexOf(item)
                         ? FontWeight.bold
