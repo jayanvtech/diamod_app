@@ -1,9 +1,11 @@
+// ignore_for_file: unused_field, unused_element
+
 import 'package:diamond_app/screens/certificate_generate_screen.dart';
 import 'package:diamond_app/screens/home_screen.dart';
 import 'package:diamond_app/screens/stock_management.dart';
 import 'package:diamond_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
+
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -68,8 +70,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-
   final List<Widget> _pages = <Widget>[
     HomeScreen(),
     CertificateGeneratePage(),
@@ -78,9 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(() {});
   }
 
   @override

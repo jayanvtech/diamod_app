@@ -3,7 +3,7 @@ import 'package:diamond_app/database/database_helper.dart';
 import 'package:diamond_app/database/diamond_data.dart';
 import 'package:diamond_app/database/stock_database.dart';
 import 'package:diamond_app/features/bottom_app_navigationbar.dart';
-import 'package:diamond_app/screens/home_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';

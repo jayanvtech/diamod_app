@@ -1,7 +1,8 @@
+// ignore_for_file: unused_field, override_on_non_overriding_member, unused_local_variable
+
 import 'dart:async';
 import 'dart:io';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:diamond_app/database/certificate_model.dart';
 import 'package:diamond_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
