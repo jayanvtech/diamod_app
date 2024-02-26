@@ -1,5 +1,6 @@
 import 'package:diamond_app/database/database_helper.dart';
 import 'package:diamond_app/database/diamond_data.dart';
+import 'package:diamond_app/features/drawer_menu_screen.dart';
 import 'package:diamond_app/features/spotrate_widget.dart';
 import 'package:diamond_app/main.dart';
 import 'package:diamond_app/screens/certificate_generate_screen.dart';
@@ -11,6 +12,73 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+
+class CustomAppBar extends StatefulWidget {
+  const CustomAppBar({super.key});
+  @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  bool _isDrawerOpen = false;
+  void _toggleDrawer() {
+    setState(() {
+      _isDrawerOpen = !_isDrawerOpen;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: CustomScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            foregroundColor: AppColors.white2,
+            //  shadowColor: Colors.deepOrange,
+            centerTitle: false,
+            elevation: 0,
+            backgroundColor: Color.fromARGB(255, 3, 0, 26),
+            actions: [
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Natural",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  "CVD",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.refresh,
+                  color: Colors.white,
+                ),
+              ),
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.menu, color: Colors.white)),
+            ],
+            pinned: false,
+            floating: true,
+            title: Text('Home',
+                style: TextStyle(color: Colors.white),
+                selectionColor: AppColors.primaryAppColor),
+          ),
+
+          // Add more Sliver widgets as needed for your content
+        ],
+      ),
+    );
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -65,39 +133,92 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _updatePrice();
-
     fetchDataAndStore(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColors.blue,
         appBar: AppBar(
-          centerTitle: true,
+          centerTitle: false,
           elevation: 0,
+          foregroundColor: AppColors.white2,
+          backgroundColor: Color.fromARGB(255, 3, 0, 26),
+          actions: [
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                "Natural",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                "CVD",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              ),
+            ),
+          ],
+          actionsIconTheme: IconThemeData(color: AppColors.primaryAppColor),
           shadowColor: Colors.transparent,
-          title: Text('Home'),
-          backgroundColor: AppColors.primaryAppColor.withOpacity(0.01),
+          title: Text(
+            'Home',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
+        drawer: Drawer(
+          child: DrawerMenuScreen(),
+        ),
+
+        // appBar: AppBar(
+        //   centerTitle: false,
+        //   elevation: 0,
+        //   actions: [
+        //     TextButton(
+        //       onPressed: () {},
+        //       child: Text("Natural"),
+        //     ),
+        //     TextButton(
+        //       onPressed: () {},
+        //       child: Text("CVD"),
+        //     ),
+        //     IconButton(onPressed: () {}, icon: Icon(Icons.refresh))
+        //   ],
+        //   shadowColor: Colors.transparent,
+        //   title: Text('Home'),
+        //   backgroundColor: AppColors.primaryAppColor.withOpacity(0.01),
+        // ),
+
         body: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.primaryAppColor
-                      .withOpacity(0.000000000000000000001),
-                  AppColors.white2,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+              color: AppColors.blue,
+              // gradient: LinearGradient(
+              //   colors: [
+              //     AppColors.primaryAppColor
+              //         .withOpacity(0.000000000000000000001),
+              //     AppColors.white2,
+              //   ],
+              //   begin: Alignment.topCenter,
+              //   end: Alignment.bottomCenter,
+              // ),
             ),
             padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Form(
               key: formKey,
               child: Column(
                 children: [
+                  SizedBox(height: 20),
                   Container(
                     decoration: BoxDecoration(
                       color: AppColors.primaryAppColor.withOpacity(0.12),
@@ -110,13 +231,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       textAlign: TextAlign.start,
                       autovalidateMode: AutovalidateMode.always,
                       style: TextStyle(
-                          height: 0.8,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black),
+                        color: AppColors.textColor,
+                        height: 0.8,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                       decoration: InputDecoration(
                           prefixIconColor: AppColors.primaryAppColor,
                           labelText: 'Carat',
+                          labelStyle: TextStyle(
+                            color: AppColors.textColor,
+                          ),
                           prefixIcon: Icon(Icons.diamond),
                           suffixText: "Ct.",
                           suffixIconColor: AppColors.primaryAppColor,
@@ -132,9 +257,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           hintText: "0",
                           hintStyle: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.black),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textColor,
+                          ),
                           //color: Colors.black, ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10))),
@@ -148,162 +274,189 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Container(
+                    padding: EdgeInsets.all(1),
                     decoration: BoxDecoration(
-                      // color: Colors.grey[100],
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: List.filled(5, BoxShadow(blurRadius: 5),
+                          growable: true),
+                      color: AppColors.primaryAppColor.withOpacity(0.16),
+
+                      // borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildSelector("Shape", shapes, selectedShapeIndex,
-                            (index) {
-                          setState(() {
-                            selectedShapeIndex = index;
-                            _updatePrice();
-                          });
-                        }),
-                        _buildSelector("Color", colors, selectedColorIndex,
-                            (index) {
-                          setState(() {
-                            selectedColorIndex = index;
-                            _updatePrice();
-                          });
-                        }),
-                        _buildSelector(
-                            "Clarity", clarities, selectedClarityIndex,
-                            (index) {
-                          setState(() {
-                            selectedClarityIndex = index;
-                            _updatePrice();
-                          });
-                        }),
-                        _buildDiscountSelector("Discount", (value) {
-                          setState(() {
-                            selectedDiscountIndex = value;
-                            // _updatePrice();
-                          });
-                        })
-                      ],
+                    child: Container(
+                      decoration: BoxDecoration(
+                        // color: Colors.grey[100],
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildSelector("Shape", shapes, selectedShapeIndex,
+                              (index) {
+                            setState(() {
+                              selectedShapeIndex = index;
+                              _updatePrice();
+                            });
+                          }),
+                          _buildSelector("Color", colors, selectedColorIndex,
+                              (index) {
+                            setState(() {
+                              selectedColorIndex = index;
+                              _updatePrice();
+                            });
+                          }),
+                          _buildSelector(
+                              "Clarity", clarities, selectedClarityIndex,
+                              (index) {
+                            setState(() {
+                              selectedClarityIndex = index;
+                              _updatePrice();
+                            });
+                          }),
+                          _buildDiscountSelector("Discount", (value) {
+                            setState(() {
+                              selectedDiscountIndex = value;
+                              // _updatePrice();
+                            });
+                          })
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: 20),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: List.filled(5, BoxShadow(blurRadius: 10)),
+                      color: AppColors.primaryAppColor.withOpacity(0.18),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
                         children: [
-                          Container(
-                              decoration: BoxDecoration(
-                                  color: AppColors.primaryAppColor
-                                      .withOpacity(0.12),
-                                  border: Border.all(
-                                      color: const Color.fromARGB(
-                                          0, 158, 158, 158)),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: _buildPriceTextField(
-                                  "Price", priceController, context)),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Color.fromARGB(22, 255, 0, 0),
-                                border: Border.all(
-                                    color:
-                                        const Color.fromARGB(0, 158, 158, 158)),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: _buildDiscountTextField(
-                                "Discount", selectedDiscountIndex),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                color:
-                                    AppColors.primaryAppColor.withOpacity(0.12),
-                                border: Border.all(
-                                    color: Color.fromARGB(0, 255, 0, 0)),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: _buildDiscountPriceTextField(
-                                "Discount Price", priceController),
-                          ),
-                          Container(
-                            child: _buildTotalPriceTextField(
-                                "Total Price", priceController),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Container(
-                          height: 50,
-                          child: ElevatedButton.icon(
-                              icon: const Icon(Icons.share),
-                              label: const Text('Share'),
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                backgroundColor: AppColors.primaryAppColor,
-                                elevation: 0,
-                                //primary: Colors.blue,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                      color: AppColors.primaryAppColor
+                                          .withOpacity(0.12),
+                                      border: Border.all(
+                                          color: const Color.fromARGB(
+                                              0, 158, 158, 158)),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: _buildPriceTextField(
+                                      "Price", priceController, context)),
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Color.fromARGB(22, 255, 0, 0),
+                                    border: Border.all(
+                                        color: const Color.fromARGB(
+                                            0, 158, 158, 158)),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: _buildDiscountTextField(
+                                    "Discount", selectedDiscountIndex),
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        CertificateGeneratePage(),
-                                  ),
-                                );
-                              }),
-                        ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: AppColors.primaryAppColor
+                                        .withOpacity(0.12),
+                                    border: Border.all(
+                                        color: Color.fromARGB(0, 255, 0, 0)),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: _buildDiscountPriceTextField(
+                                    "Discount Price", priceController),
+                              ),
+                              Container(
+                                child: _buildTotalPriceTextField(
+                                    "Total Price", priceController),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        height: 102,
-                        child: SpotrateWidget(),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        height: 60,
-                        child: ElevatedButton.icon(
-                            icon: const Icon(Icons.filter_list),
-                            label: const Text('Generate Certificate'),
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                elevation: 0,
-                                primary: AppColors.primaryAppColor,
-                                disabledBackgroundColor:
-                                    Color.fromARGB(255, 76, 0, 255)),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      CertificateGeneratePage(),
-                                ),
-                              );
-                            }),
-                      ),
-                    ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Container(
+                      height: 50,
+                      child: ElevatedButton.icon(
+                          icon: const Icon(
+                            Icons.share,
+                            color: Colors.white,
+                          ),
+                          label: Text('Share',
+                              style: TextStyle(color: AppColors.textColor)),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            backgroundColor: AppColors.primaryAppColor,
+                            elevation: 0,
+
+                            //primary: Colors.blue,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CertificateGeneratePage(),
+                              ),
+                            );
+                          }),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    // height: 102,
+                    child: SpotrateWidget(),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: 60,
+                    child: ElevatedButton.icon(
+                        icon: const Icon(Icons.filter_list),
+                        label: const Text('Generate Certificate'),
+                        style: ElevatedButton.styleFrom(
+                            foregroundColor: AppColors.white2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            elevation: 0,
+                            primary: AppColors.primaryAppColor,
+                            disabledBackgroundColor:
+                                Color.fromARGB(255, 76, 0, 255)),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CertificateGeneratePage(),
+                            ),
+                          );
+                        }),
+                  ),
+                  SizedBox(
+                    height: 50,
                   ),
                 ],
               ),
@@ -326,6 +479,7 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: discountPriceController,
         inputFormatters: [LengthLimitingTextInputFormatter(8)],
         style: TextStyle(
+          color: AppColors.textColor,
           height: 0.8,
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -335,8 +489,8 @@ class _HomeScreenState extends State<HomeScreen> {
           labelText: title,
           // prefixIcon: Icon(Icons.attach_money, size: 14),
           suffixText: "/Ct.",
-          suffixStyle: TextStyle(fontSize: 12),
-          labelStyle: TextStyle(fontSize: 12),
+          suffixStyle: TextStyle(fontSize: 12, color: AppColors.textColor),
+          labelStyle: TextStyle(fontSize: 12, color: AppColors.textColor),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.primaryAppColor),
             borderRadius: BorderRadius.circular(10),
@@ -364,6 +518,7 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: totalPriceController,
         inputFormatters: [LengthLimitingTextInputFormatter(8)],
         style: TextStyle(
+          color: AppColors.textColor,
           height: 0.8,
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -373,8 +528,11 @@ class _HomeScreenState extends State<HomeScreen> {
           labelText: title,
           // prefixIcon: Icon(Icons.attach_money, size: 14),
           suffixText: "/Ct.",
-          suffixStyle: TextStyle(fontSize: 12),
-          labelStyle: TextStyle(fontSize: 12),
+          suffixStyle: TextStyle(fontSize: 12, color: AppColors.textColor),
+          labelStyle: TextStyle(
+            fontSize: 12,
+            color: AppColors.textColor,
+          ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.primaryAppColor),
             borderRadius: BorderRadius.circular(10),
@@ -448,7 +606,10 @@ class _HomeScreenState extends State<HomeScreen> {
             // Change the icon based on the sign of the discount value
             color: AppColors.primaryAppColor,
           ),
-          labelStyle: TextStyle(fontSize: 12),
+          labelStyle: TextStyle(
+            fontSize: 12,
+            color: AppColors.textColor,
+          ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.red),
             borderRadius: BorderRadius.circular(10),
@@ -476,6 +637,7 @@ Widget _buildPriceTextField(
         LengthLimitingTextInputFormatter(5)
       ], // Limit to 5 characters
       style: TextStyle(
+        color: AppColors.textColor,
         height: 0.8,
         fontSize: 14,
         fontWeight: FontWeight.bold,
@@ -483,13 +645,20 @@ Widget _buildPriceTextField(
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         suffixText: "/Ct.",
-        suffixStyle: TextStyle(fontSize: 12),
+        suffixStyle: TextStyle(
+          fontSize: 12,
+          color: AppColors.textColor,
+        ),
+        prefixIconColor: AppColors.textColor,
         prefixIcon: Padding(
           padding: EdgeInsets.only(left: 8, right: 8), // Adjust the padding
           child: Icon(Icons.attach_money, size: 18), // Adjust the size
         ),
         labelText: title,
-        labelStyle: TextStyle(fontSize: 12),
+        labelStyle: TextStyle(
+          fontSize: 12,
+          color: AppColors.textColor,
+        ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue),
           borderRadius: BorderRadius.circular(10),
@@ -513,10 +682,11 @@ Widget _buildDiscountSelector(String title, ValueChanged<double> onChanged) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(height: 10),
         Text(
           title,
           style: TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
               color: AppColors.primaryAppColor),
         ),
@@ -546,7 +716,7 @@ Widget _buildDiscountSelector(String title, ValueChanged<double> onChanged) {
                         : FontWeight.normal,
                     color: discount == selectedDiscountIndex
                         ? Colors.red
-                        : Colors.black,
+                        : AppColors.textColor,
                   ),
                 ),
               );
@@ -577,10 +747,11 @@ Widget _buildSelector(String title, List<String> items, int selectedIndex,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(height: 10),
         Text(
           title,
           style: TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
               color: AppColors.primaryAppColor),
         ),
@@ -596,7 +767,7 @@ Widget _buildSelector(String title, List<String> items, int selectedIndex,
                   style: TextStyle(
                     color: selectedIndex == items.indexOf(item)
                         ? AppColors.primaryAppColor
-                        : Colors.black,
+                        : AppColors.textColor,
                     fontSize: 16,
                     fontWeight: selectedIndex == items.indexOf(item)
                         ? FontWeight.bold

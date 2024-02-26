@@ -78,7 +78,6 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
     } catch (error) {
       // Handle other exceptions (e.g., network/internet issues)
       print('Error: $error');
-
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             elevation: 0,
@@ -191,6 +190,7 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
                               children: [
                                 Text(selectedSpotRates[0].name,
                                     style: TextStyle(
+                                      color: AppColors.textColor,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                     )),
@@ -199,6 +199,7 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
                                     Text(selectedSpotRates[0].ltp,
                                         style: TextStyle(
                                           fontSize: 15,
+                                          color: AppColors.textColor,
                                           fontWeight: FontWeight.bold,
                                         )),
 
@@ -221,13 +222,19 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
                                   children: [
                                     Text(
                                       "Last Changed: ",
-                                      style: TextStyle(fontSize: 10),
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: AppColors.textColor,
+                                      ),
                                     ),
                                     Text(
                                       selectedSpotRates[0]
                                           .time
                                           .substring(11, 19),
-                                      style: TextStyle(fontSize: 10),
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: AppColors.textColor,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -237,6 +244,7 @@ class _SpotrateWidgetState extends State<SpotrateWidget> {
                                     Text(
                                       selectedSpotRates[0].chg,
                                       style: TextStyle(
+                                        color: AppColors.textColor,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),

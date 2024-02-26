@@ -1,8 +1,11 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:diamond_app/database/database_helper.dart';
 import 'package:diamond_app/database/diamond_data.dart';
+import 'package:diamond_app/database/stock_database.dart';
+import 'package:diamond_app/features/bottom_app_navigationbar.dart';
 import 'package:diamond_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqlite_api.dart';
@@ -11,6 +14,10 @@ import 'package:diamond_app/utils/app_colors.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _requestStoragePermission();
+
+  await DatabaseHelper().initDatabase();
+  await DataManager().fetchDataAndStore();
+  // await StockDatabaseHelper().initDatabase();
   await Permission.manageExternalStorage.request();
   await AwesomeNotifications().initialize(null, [
     NotificationChannel(
@@ -60,7 +67,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       // themeMode: uselightMode ? ThemeMode.light : ThemeMode.dark,
@@ -72,7 +79,7 @@ class MyApp extends StatelessWidget {
       //brightness: Brightness.dark),
       home: ChangeNotifierProvider(
         create: (context) => DiamondProvider(),
-        child: HomeScreen(),
+        child: MyHomePage(),
       ),
     );
   }
