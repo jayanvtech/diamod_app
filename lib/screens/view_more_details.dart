@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:diamond_app/database/stock_database.dart';
 import 'package:diamond_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
