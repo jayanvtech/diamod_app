@@ -30,7 +30,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
     'AC',
     'RD'
   ];
-  List<String> clarityFilters = ['Vs1', 'si1', 'Vvs2'];
+  List<String> clarityFilters = ['Vs1', 'Si1', 'Vs2', 'Vvs2'];
   List<String> colorFilters = ['D', 'E', 'F', 'G', 'H', 'I'];
   List<String> sizeFilters = ['<1', '1-2', '2-4', '4+'];
   int height = 0;
@@ -240,6 +240,8 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                   child: Text('View More'),
                 ),
               ),
+              //add to cart
+
               Text(
                 '${diamond.availability}',
                 style: TextStyle(
@@ -258,45 +260,58 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
   // Method to show filter options
   void showFilterOptions(BuildContext context) {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Filters'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildFilterOptions('Shape', shapeFilters, selectedShapes),
-                buildFilterOptions(
-                    'Clarity', clarityFilters, selectedClarities),
-                buildFilterOptions('Color', colorFilters, selectedColors),
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: AppColors.blue,
+              title: Text(
+                'Filters',
+                style: TextStyle(color: AppColors.white2),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildFilterOptions(
+                        'Shape', shapeFilters, selectedShapes, setState),
+                    buildFilterOptions(
+                        'Clarity', clarityFilters, selectedClarities, setState),
+                    buildFilterOptions(
+                        'Color', colorFilters, selectedColors, setState),
+                    buildFilterOptions(
+                      'Size',
+                      sizeFilters,
+                      selectedSizes,
+                      setState,
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      // Apply filter and close dialog
+                      Navigator.of(context).pop();
+                    });
+                  },
+                  child: Text('Apply'),
+                ),
               ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  // Apply filter and close dialog
-                  Navigator.of(context).pop();
-                });
-              },
-              child: Text('Apply'),
-            ),
-          ],
-        );
-      },
-    );
+            );
+          });
+        });
   }
 
   // Method to build filter options
-  Widget buildFilterOptions(
-      String title, List<String> options, List<String> selectedOptions) {
+  Widget buildFilterOptions(String title, List<String> options,
+      List<String> selectedOptions, setState) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title),
+        Text(title, style: TextStyle(color: AppColors.white2)),
         Wrap(
           spacing: 8.0,
           children: options.map((option) {
@@ -322,10 +337,11 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                     : Colors
                         .black, // Add this line to change text color based on selection
               ),
+
               backgroundColor: selectedOptions.contains(option)
                   ? Colors.blue
-                  : Colors
-                      .grey, // Add this line to change background color based on selection
+                  : AppColors.white2,
+              // Add this line to change background color based on selection
             );
           }).toList(),
         ),

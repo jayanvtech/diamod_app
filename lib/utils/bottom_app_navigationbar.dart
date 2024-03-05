@@ -1,7 +1,9 @@
 // ignore_for_file: unused_field, unused_element
 
+import 'package:diamond_app/screens/Authentication/login_screen.dart';
 import 'package:diamond_app/screens/certificate_generate_screen.dart';
 import 'package:diamond_app/screens/home_screen.dart';
+import 'package:diamond_app/screens/profile_screen.dart';
 import 'package:diamond_app/screens/stock_management.dart';
 import 'package:diamond_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +31,8 @@ List<PersistentBottomNavBarItem> _navBarsItems() {
       inactiveColorPrimary: Colors.grey,
     ),
     PersistentBottomNavBarItem(
-      icon: Icon(Icons.settings),
-      title: ("Settings"),
+      icon: Icon(Icons.person),
+      title: ("Profile"),
       activeColorPrimary: Colors.blue,
       inactiveColorPrimary: Colors.grey,
     ),
@@ -47,7 +49,7 @@ PersistentTabView _buildBottomNavigationScreens(context) {
       HomeScreen(),
       CertificateGeneratePage(),
       StockManagementScreen(),
-      CertificateGeneratePage(),
+      ProfileScreen(),
     ],
     items: _navBarsItems(),
     confineInSafeArea: true,
@@ -74,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeScreen(),
     CertificateGeneratePage(),
     StockManagementScreen(),
-    CertificateGeneratePage(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -100,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
           HomeScreen(),
           CertificateGeneratePage(),
           StockManagementScreen(),
-          CertificateGeneratePage(),
+          ProfileScreen(),
         ],
         items: _navBarsItems(),
         confineInSafeArea: true,

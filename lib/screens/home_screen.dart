@@ -12,6 +12,16 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 class CustomAppBar extends StatefulWidget {
   const CustomAppBar({super.key});
@@ -85,6 +95,26 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
+}
+
+final GlobalKey _globalKey = GlobalKey();
+Future<void> _capturePngAndShare() async {
+  try {
+    RenderRepaintBoundary boundary =
+        _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+    // Share the captured image using share_plus
+    final tempDir = await getTemporaryDirectory();
+    final file = await File('${tempDir.path}/image.png').writeAsBytes(pngBytes);
+
+    // Share the captured image using share_plus
+    await Share.shareFiles([file.path], text: 'Diomand Details');
+  } catch (e) {
+    print('Error capturing image: $e');
+  }
 }
 
 List<String> shapes = [
@@ -392,33 +422,231 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 20,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Container(
-                      height: 50,
-                      child: ElevatedButton.icon(
-                          icon: const Icon(
-                            Icons.share,
-                            color: Colors.white,
-                          ),
-                          label: Text('Share',
-                              style: TextStyle(color: AppColors.textColor)),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            backgroundColor: AppColors.primaryAppColor,
-                            elevation: 0,
-
-                            //primary: Colors.blue,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CertificateGeneratePage(),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: ElevatedButton.icon(
+                              icon: Icon(
+                                Icons.share,
+                                color: AppColors.white2,
                               ),
-                            );
-                          }),
+                              label: Text(
+                                'Share',
+                                style: TextStyle(
+                                    fontSize: 14, color: AppColors.white2),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                backgroundColor: AppColors.primaryAppColor,
+                                elevation: 0,
+                                //primary: Colors.blue,
+                              ),
+                              onPressed: () {
+                                if (selectedCarat <= 0) {
+                                  // Show a Snackbar indicating that the stone weight needs to be entered
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                          'Please enter the stone weight.'),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                } else {
+                                  // Build the message to display in the AlertDialog
+                                  // String message = ""
+                                  //     "Stone Weight: ${selectedCarat.toString()} Ct.\n"
+                                  //     "Shape: ${shapes[selectedShapeIndex]}\n"
+                                  //     "Color: ${colors[selectedColorIndex]}\n"
+                                  //     "Clarity: ${clarities[selectedClarityIndex]}\n"
+                                  //     "Discount: ${selectedDiscountIndex.toStringAsFixed(1)}%";
+
+                                  // Show the AlertDialog
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      DateTime currentDate = DateTime.now();
+                                      String formattedDate =
+                                          "${currentDate.day}/${currentDate.month}/${currentDate.year}";
+                                      return AlertDialog(
+                                        backgroundColor: AppColors.blue,
+                                        iconColor: AppColors.white2,
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Share",
+                                                style: TextStyle(
+                                                    color: AppColors.white2)),
+                                            IconButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                icon: Icon(
+                                                  Icons
+                                                      .cancel_presentation_sharp,
+                                                  color: AppColors.white2,
+                                                ))
+                                          ],
+                                        ),
+                                        content: RepaintBoundary(
+                                          key: _globalKey,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              width: 450,
+                                              height: 150,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Colors.pink,
+                                                    AppColors.blue,
+                                                  ],
+                                                  begin: Alignment.topLeft,
+                                                  end: Alignment.bottomRight,
+                                                ),
+                                              ),
+                                              child: Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Stone Weight\n${selectedCarat.toString()} Ct.",
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "Shape\n${shapes[selectedShapeIndex]}",
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "Color\n${colors[selectedColorIndex]}",
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Clarity\n${clarities[selectedClarityIndex]}",
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "Discount\n${selectedDiscountIndex.toStringAsFixed(1)}%",
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "Per carat\n${calculateDiscountPrice()}",
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Total\n${calculateTotalPrice()}",
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'price\n${priceController.text}',
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'Date\n${formattedDate}',
+                                                          style: TextStyle(
+                                                            color: AppColors
+                                                                .white2,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: _capturePngAndShare,
+                                            child: Text('Share Image'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              // Build the message to share
+                                              String message = ""
+                                                  "Stone Weight: ${selectedCarat.toString()} Ct.\n"
+                                                  "Shape: ${shapes[selectedShapeIndex]}\n"
+                                                  "Color: ${colors[selectedColorIndex]}\n"
+                                                  "Clarity: ${clarities[selectedClarityIndex]}\n"
+                                                  "Discount: ${selectedDiscountIndex.toStringAsFixed(1)}%\n"
+                                                  "Per carat: ${calculateDiscountPrice()}\n"
+                                                  "Total: ${calculateTotalPrice()}\n"
+                                                  'price:${priceController.text}\n'
+                                                  'Date:${formattedDate}';
+
+                                              // Share the message using share_plus
+                                              Share.share(message);
+                                            },
+                                            child: Text('Share Text'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(

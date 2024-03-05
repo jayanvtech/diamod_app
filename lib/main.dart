@@ -2,12 +2,17 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:diamond_app/database/database_helper.dart';
 import 'package:diamond_app/database/diamond_data.dart';
 import 'package:diamond_app/database/stock_database.dart';
-import 'package:diamond_app/features/bottom_app_navigationbar.dart';
+import 'package:diamond_app/screens/Authentication/login_screen.dart';
+import 'package:diamond_app/screens/Authentication/signup_screen.dart';
+import 'package:diamond_app/utils/bottom_app_navigationbar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:diamond_app/utils/app_colors.dart';
 
@@ -70,18 +75,70 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      // themeMode: uselightMode ? ThemeMode.light : ThemeMode.dark,
       theme: ThemeData(
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         colorSchemeSeed: AppColors.primaryAppColor,
         useMaterial3: true,
       ),
-      //brightness: Brightness.dark),
-      home: ChangeNotifierProvider(
-        create: (context) => DiamondProvider(),
-        child: MyHomePage(),
+      home: FutureBuilder<bool>(
+        future: checkAuthentication(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(); // or any loading indicator
+          } else if (snapshot.hasError || snapshot.data == null) {
+            return SignUpScreen();
+            // Show login/signup screen if there's an error or data is null
+          } else {
+            if (snapshot.data!) {
+              print('User is sssssauthenticated');
+              return ChangeNotifierProvider(
+                  create: (context) => DiamondProvider(), child: MyHomePage());
+            } else {
+              print('Erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+              return ChangeNotifierProvider(
+                create: (context) => DiamondProvider(),
+                child:
+                    MyHomePage(), // Assuming SignUpScreen is your authentication screen
+              );
+            }
+          }
+        },
       ),
     );
+  }
+
+  Future<bool> checkAuthentication() async {
+    final uri = Uri.parse("http://192.168.130.41:3013/v1/user/verify_user");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? authToken = prefs.getString('authToken');
+    if (authToken == null) {
+      print('No authToken found');
+      Get.to(() => LoginScreen());
+      return false;
+    }
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': '$authToken', // Add the authToken to the headers
+    };
+    print('Token checkauith: $authToken');
+    try {
+      http.Response response = await http.post(uri, headers: headers);
+
+      if (response.statusCode == 200) {
+        // User is authenticated
+        ChangeNotifierProvider(
+          create: (context) => DiamondProvider(),
+          child: MyHomePage(),
+        );
+        return true;
+      } else {
+        // User is not authenticated
+        return false;
+      }
+    } catch (error) {
+      print('Error checking authentication: $error');
+      return false;
+    }
   }
 }
 
