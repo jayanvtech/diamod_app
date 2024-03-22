@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
             return Container(
               child: Center(
                               child: LoadingAnimationWidget.stretchedDots(
-                            color: AppColors.white2,
+                            color: Theme.of(context).colorScheme.secondaryContainer,
                             size: 30,
                           )),
             );; // or any loading indicator
@@ -110,7 +110,9 @@ class MyApp extends StatelessWidget {
               return ChangeNotifierProvider(
                 create: (context) => DiamondProvider(),
                 child:
-                    MyHomePage(), 
+                    MyHomePage(
+                    
+                    ), 
                     //LoginScreen(), // Assuming SignUpScreen is your authentication screen
               );
             }
@@ -150,7 +152,9 @@ print(response.statusCode.toString()+" response.statusCode.toString()");
         print(userData);
         ChangeNotifierProvider(
           create: (context) => DiamondProvider(),
-          child: MyHomePage(),
+          child: MyHomePage(
+            
+          ),
         );
         
         return true;

@@ -171,7 +171,7 @@ checkInternet() async {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.primaryAppColor.withOpacity(0.12),
+        color: Theme.of(context).colorScheme.onSecondary,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -180,7 +180,7 @@ checkInternet() async {
           if (selectedSpotRates.isNotEmpty)
             Container(
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blue),
+                  border: Border.all(color: Theme.of(context).colorScheme.background,),
                   borderRadius: BorderRadius.circular(10)),
               child: Container(
                 child: Padding(
@@ -201,20 +201,20 @@ checkInternet() async {
                           DropdownButton<String>(
                             icon: Icon(Icons.arrow_drop_down),
                             borderRadius: BorderRadius.circular(16),
-                            value: selectedCurrency,dropdownColor: AppColors.blue,
+                            value: selectedCurrency,dropdownColor: Theme.of(context).colorScheme.background,
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedCurrency = newValue!;
                               });
                             },
                             style: TextStyle(
-                              color: AppColors.primaryAppColor,
+                              color: Theme.of(context).colorScheme.primary,
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                             ),
                             underline: Container(
                               height: 2,
-                              color: AppColors.primaryAppColor,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             items: spotRates
                                 .map<DropdownMenuItem<String>>((SpotRate spot) {
@@ -240,7 +240,7 @@ checkInternet() async {
                               children: [
                                 Text(selectedSpotRates[0].name,
                                     style: TextStyle(
-                                      color: AppColors.textColor,
+                                      color: Theme.of(context).colorScheme.secondaryContainer,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                     )),
@@ -249,7 +249,7 @@ checkInternet() async {
                                     Text(selectedSpotRates[0].ltp,
                                         style: TextStyle(
                                           fontSize: 15,
-                                          color: AppColors.textColor,
+                                          color: Theme.of(context).colorScheme.secondaryContainer,
                                           fontWeight: FontWeight.bold,
                                         )),
 
@@ -274,7 +274,7 @@ checkInternet() async {
                                       "Last Changed: ",
                                       style: TextStyle(
                                         fontSize: 10,
-                                        color: AppColors.textColor,
+                                        color: Theme.of(context).colorScheme.secondaryContainer,
                                       ),
                                     ),
                                     Text(
@@ -283,7 +283,7 @@ checkInternet() async {
                                           .substring(11, 19),
                                       style: TextStyle(
                                         fontSize: 10,
-                                        color: AppColors.textColor,
+                                        color: Theme.of(context).colorScheme.secondaryContainer,
                                       ),
                                     ),
                                   ],
@@ -294,7 +294,7 @@ checkInternet() async {
                                     Text(
                                       selectedSpotRates[0].chg,
                                       style: TextStyle(
-                                        color: AppColors.textColor,
+                                        color: Theme.of(context).colorScheme.secondaryContainer,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),

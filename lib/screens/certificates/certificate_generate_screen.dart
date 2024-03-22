@@ -3,9 +3,13 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:diamond_app/screens/certificates/gia_certificaate_screen.dart';
+import 'package:diamond_app/screens/certificates/hrd_certificate_screen.dart';
 import 'package:diamond_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -98,7 +102,12 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Download History'),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          title: Text(
+            'Download History',
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.secondaryContainer),
+          ),
           content: Container(
             width: double.maxFinite,
             child: ListView.builder(
@@ -206,10 +215,10 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
   @override
   Widget _buildPage(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.blue,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: AppBar(
-        foregroundColor: AppColors.white2,
-        backgroundColor: AppColors.blue,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.onBackground,
         title: Text('Certificate Downloader'),
         actions: [
           IconButton(
@@ -233,9 +242,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      boxShadow: List.filled(5, BoxShadow(blurRadius: 5),
-                          growable: true),
-                      color: AppColors.primaryAppColor.withOpacity(0.16),
+                      color: Theme.of(context).colorScheme.onSecondary,
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
                     children: [
@@ -248,7 +255,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           style: TextStyle(
-                            color: AppColors.textColor,
+                            color: Theme.of(context).colorScheme.primary,
                             height: 0.8,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -256,43 +263,121 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                           keyboardType: TextInputType.number,
                           controller: certificateNumberController,
                           decoration: InputDecoration(
-                              prefixIconColor: AppColors.primaryAppColor,
-                              labelText: 'Certificate Number',
-                              labelStyle: TextStyle(
-                                color: AppColors.textColor,
+                            prefixIconColor:
+                                Theme.of(context).colorScheme.primary,
+                            labelText: 'Certificate Number',
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.primary),
+                            prefixIcon: Icon(Icons.picture_as_pdf),
+                            suffixText: "",
+                            suffixIconColor:
+                                Theme.of(context).colorScheme.primary,
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.delete_forever),
+                              onPressed: () {
+                                setState(() {
+                                  // formKey.currentState?.reset();
+                                  //certificateNumberController.clear();
+                                });
+                              },
+                            ),
+                            hintText: "0",
+                            hintStyle: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            //color: Colors.black, ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
                               ),
-                              prefixIcon: Icon(Icons.picture_as_pdf),
-                              suffixText: "",
-                              suffixIconColor: AppColors.primaryAppColor,
-                              suffixIcon: IconButton(
-                                icon: Icon(Icons.delete_forever),
-                                onPressed: () {
-                                  setState(() {
-                                    // formKey.currentState?.reset();
-                                    //certificateNumberController.clear();
-                                  });
-                                },
-                              ),
-                              hintText: "0",
-                              hintStyle: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textColor,
-                              ),
-                              //color: Colors.black, ),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          enabled:
-                              !_downloading, // Disable text field while downloading
+                            ),
+
+                            enabled:
+                                !_downloading, // Disable text field while downloading
+                          ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Container(
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              child: TextButton(
+                                  onPressed: () {
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => GiaCertificateScreen(
+                                          certificateNumber: certificateNumberController.text,
+                                        ),
+                                      ),
+                                    );                                      
+                                  },
+                                  child: Text(
+                                    'GIA',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary),
+                                  ))),
+                          SizedBox(width: 10),
+                          Container(
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HrdCertificateScreen(
+                                          certificateNumber: certificateNumberController.text,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'HRD',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary),
+                                  ))),
+                          SizedBox(width: 10),
+                          Container(
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              child: TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    'IGI',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary),
+                                  ))),
+                        ],
+                      ),
+                      SizedBox(height: 10),
                       Container(
                         height: 60,
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryAppColor,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 50, vertical: 20),
                             shape: RoundedRectangleBorder(
@@ -315,12 +400,14 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                                       whereArgs: [certificateNumber]);
                               if (certificates.isNotEmpty) {
                                 // Certificate already downloaded, show message and open it
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content:
-                                        Text('Certificate already downloaded.'),
-                                  ),
-                                );
+                                showCustomSnackbar(
+                                    context,
+                                    'Certificate already downloaded',
+                                    'Certificate already downloaded',
+                                    Icon(
+                                      Icons.error_outline_outlined,
+                                      color: Colors.white,
+                                    ));
                                 OpenFile.open(certificates.first['filePath']);
                               } else {
                                 if (Platform.isAndroid || Platform.isIOS) {
@@ -341,19 +428,23 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                                 });
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text('Please Enter Certificate Number'),
-                                ),
-                              );
+                              showCustomSnackbar(
+                                  context,
+                                  'Please enter certificate number',
+                                  'Certificate number cannot be empty',
+                                  Icon(
+                                    Icons.error_outline_outlined,
+                                    color: Colors.white,
+                                  ));
                               // Handle empty certificate number case
                             }
                           },
                           child: _downloading
                               ? Center(
                                   child: LoadingAnimationWidget.prograssiveDots(
-                                  color: AppColors.white2,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
                                   size: 30,
                                 )) // Show progress indicator while downloading
                               : Row(
@@ -386,7 +477,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                 Text(
                   'History',
                   style: TextStyle(
-                    color: AppColors.white2,
+                    color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                   ),
@@ -395,9 +486,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      boxShadow: List.filled(5, BoxShadow(blurRadius: 5),
-                          growable: true),
-                      color: AppColors.primaryAppColor.withOpacity(0.16),
+                      color: Theme.of(context).colorScheme.onSecondary,
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -409,20 +498,28 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                           Text("ID",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.white2)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer)),
                           Text("Certificate Number",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.white2)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer)),
                           SizedBox(width: 10),
                           Text("Open",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.white2)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer)),
                           Text("Delete",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.white2)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer)),
                         ],
                       )
                     ],
@@ -433,9 +530,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        boxShadow: List.filled(5, BoxShadow(blurRadius: 5),
-                            growable: true),
-                        color: AppColors.primaryAppColor.withOpacity(0.16),
+                        color: Theme.of(context).colorScheme.onSecondary,
                         borderRadius: BorderRadius.circular(10)),
                     child: FutureBuilder<List<Map<String, dynamic>>>(
                       future: _database.query('certificates'),
@@ -461,6 +556,27 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
     );
   }
 
+  void showCustomSnackbar(
+    BuildContext context,
+    String title,
+    String message,
+    Icon icon,
+  ) {
+    Get.snackbar(
+      titleText:
+          Text(title, style: TextStyle(color: Colors.white, fontSize: 16)),
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      animationDuration: Duration(milliseconds: 500),
+      barBlur: 20,
+      icon: icon,
+      snackStyle: SnackStyle.FLOATING,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      colorText: Colors.white,
+    );
+  }
+
   Widget _showHistoryView(List<Map<String, dynamic>> certificates) {
     return ListView.builder(
       itemCount: certificates.length,
@@ -475,7 +591,9 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                 children: [
                   Text(
                     certificate['id'].toString(),
-                    style: TextStyle(color: AppColors.white2),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 20),
                   ),
                   TextButton(
                     child: Column(
@@ -483,12 +601,16 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                       children: [
                         Text(
                           '${certificate['certificateNumber']}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary),
                         ),
                         Text(
                           '${certificate['downloadTime']}',
-                          style:
-                              TextStyle(color: AppColors.white2, fontSize: 10),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 10,
+                          ),
                         ),
                       ],
                     ),
@@ -541,35 +663,19 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                         try {
                           OpenFile.open(certificate['filePath']);
                           if (certificate['filePath'] != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Colors.grey[800],
-                                duration: Duration(seconds: 3),
-                                padding: EdgeInsets.all(10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                behavior: SnackBarBehavior.floating,
-                                content: Container(
-                                  height: 40,
-                                  child: Center(
-                                    child: Text(
-                                      textAlign: TextAlign.start,
-                                      'Certificate Does Not Exist in Device',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
+                            showCustomSnackbar(
+                                context,
+                                'Certificate Does Not Exist in Device',
+                                'Certificate Does Not Exist in Device',
+                                Icon(
+                                  Icons.error_outline_outlined,
+                                  color: Colors.white,
+                                ));
                           }
                         } catch (e) {}
                       },
                       icon: Icon(Icons.open_in_browser),
-                      color: AppColors.white2),
+                      color: AppColors.primaryAppColor),
                   IconButton(
                     icon: Icon(Icons.delete, color: AppColors.primaryAppColor),
                     onPressed: () {
@@ -591,31 +697,9 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
       BuildContext context, String certificateNumber) async {
     final url = 'https://igi.org/API-IGI/viewpdf.php?r=$certificateNumber';
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.grey[800],
-        duration: Duration(seconds: 5),
-        padding: EdgeInsets.all(10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        behavior: SnackBarBehavior.floating,
-        content: Container(
-          height: 50,
-          child: const Center(
-            child: Text(
-              textAlign: TextAlign.start,
-              'PDF Downloading...',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-    );
-
     try {
       var response = await http.get(Uri.parse(url));
+
 
       // Request storage permission for both platforms
       if (Platform.isAndroid || Platform.isIOS) {
@@ -629,7 +713,14 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
 
       if (response.statusCode == 200) {
         String fileName = 'certificate_$certificateNumber.pdf';
-
+        showCustomSnackbar(
+            context,
+            'Downloading PDF...',
+            'Downloading PDF...',
+            Icon(
+              Icons.download,
+              color: Colors.white,
+            ));
         // Get the downloads folder path for both platforms
         String downloadsFolderPath = await _getDownloadsFolderPath();
 
@@ -641,6 +732,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
 
         try {
           OpenFile.open(filepath);
+          print("File Opened  " + filepath);
         } catch (e) {
           print('Error opening file: $e');
         }
@@ -710,58 +802,26 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.grey[800],
-            duration: Duration(seconds: 3),
-            padding: EdgeInsets.all(10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            behavior: SnackBarBehavior.floating,
-            content: Container(
-              height: 40,
-              child: Center(
-                child: Text(
-                  textAlign: TextAlign.start,
-                  'Failed to download PDF. Status code: ${response.statusCode}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
+        showCustomSnackbar(
+            context,
+            "Error " + response.statusCode.toString(),
+            "Failed to download PDF.",
+            Icon(
+              Icons.error_outline_outlined,
+              color: Colors.white,
+            ));
         print('Failed to download PDF. Status code: ${response.statusCode}');
         throw Exception('Failed to download PDF');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.grey[800],
-          duration: Duration(seconds: 3),
-          padding: EdgeInsets.all(10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          behavior: SnackBarBehavior.floating,
-          content: Container(
-            height: 40,
-            child: Center(
-              child: Text(
-                textAlign: TextAlign.start,
-                'Error: $e',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
+      showCustomSnackbar(
+          context,
+          "Error",
+          "Failed to download PDF.",
+          Icon(
+            Icons.error_outline_outlined,
+            color: Colors.white,
+          ));
       print('Error: $e');
     }
   }
@@ -776,6 +836,9 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
       throw Exception('Unsupported platform');
     }
   }
+  Widget webView = InAppWebView(
+    initialUrlRequest: URLRequest(url: WebUri('https://www.gia.edu/report-check?reportno=2201265284')
+  ));
 }
 
 class NotificationController {
@@ -806,6 +869,7 @@ class NotificationController {
       }
     }
   }
+  
 }
 
 //History
@@ -888,4 +952,5 @@ class CertificateHistory extends StatelessWidget {
       ),
     );
   }
+  
 }

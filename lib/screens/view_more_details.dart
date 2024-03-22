@@ -14,10 +14,10 @@ class ViewDiamondDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final uri = Uri.tryParse(diamond.comments ?? '');
     return Scaffold(
-      backgroundColor: AppColors.blue,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: AppBar(
-        foregroundColor: AppColors.white2,
-        backgroundColor: AppColors.blue,
+        foregroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text('${diamond.stockNum}'),
       ),
       body: SingleChildScrollView(
@@ -25,7 +25,7 @@ class ViewDiamondDetailsPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.primaryAppColor.withOpacity(0.20),
+              color: Theme.of(context).colorScheme.onSecondary,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -65,12 +65,12 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.white2),
+                                    color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 '${diamond.shape}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                             ],
                           ),
@@ -81,12 +81,12 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.white2),
+                                    color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 '${diamond.size}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                             ],
                           ),
@@ -97,12 +97,12 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.white2),
+                                    color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 '${diamond.color}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                             ],
                           ),
@@ -120,12 +120,12 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.white2),
+                                    color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 '${diamond.clarity}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                             ],
                           ),
@@ -136,12 +136,12 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.white2),
+                                    color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 '${diamond.cut}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                             ],
                           ),
@@ -152,12 +152,12 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.white2),
+                                    color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 '${diamond.polish}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                             ],
                           ),
@@ -168,7 +168,7 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.white2)),
+                              color: Theme.of(context).colorScheme.secondaryContainer)),
                       SizedBox(height: 8),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,17 +177,17 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                           Text(
                             'Girdle Condition: ${diamond.girdleCondition}',
                             style: TextStyle(
-                                fontSize: 14, color: AppColors.white2),
+                                fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                           ),
                           Text(
                             'Girdle Min: ${diamond.girdleMin}',
                             style: TextStyle(
-                                fontSize: 14, color: AppColors.white2),
+                                fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                           ),
                           Text(
                             'Girdle Percantage: ${diamond.girdlePercent}',
                             style: TextStyle(
-                                fontSize: 14, color: AppColors.white2),
+                                fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                           ),
                         ],
                       ),
@@ -196,7 +196,7 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.white2)),
+                              color: Theme.of(context).colorScheme.secondaryContainer)),
                       SizedBox(height: 8),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,12 +209,12 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
-                                    color: AppColors.white2),
+                                    color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 ' ${diamond.fluorIntensity}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                             ],
                           ),
@@ -223,7 +223,7 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.white2)),
+                                  color: Theme.of(context).colorScheme.secondaryContainer)),
                           SizedBox(height: 8),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,27 +232,27 @@ class ViewDiamondDetailsPage extends StatelessWidget {
                               Text(
                                 'Rap Price: ${diamond.rapPrice}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 'Price Per Carat: ${diamond.pricePerCara}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 'Total Sales Price: ${diamond.totalSalesPrice}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 'Depth Percent: ${diamond.depthPercent}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                               Text(
                                 'Table Percent: ${diamond.tablePercent}',
                                 style: TextStyle(
-                                    fontSize: 14, color: AppColors.white2),
+                                    fontSize: 14, color: Theme.of(context).colorScheme.secondaryContainer),
                               ),
                             ],
                           ),

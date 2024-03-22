@@ -19,10 +19,10 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.blue,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: AppBar(
-        backgroundColor: AppColors.blue,
-        foregroundColor: AppColors.white2,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        foregroundColor: Theme.of(context).colorScheme.secondaryContainer,
         actions: [
           IconButton(
             onPressed: () async {
@@ -42,23 +42,11 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
       body: _isRefreshing
           ? Center(
               child: LoadingAnimationWidget.stretchedDots(
-                  color: AppColors.white2, size: 50))
+                  color: Theme.of(context).colorScheme.secondaryContainer, size: 50))
           : SingleChildScrollView(
               child: Container(
                 decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    colors: [
-                      // Dark blue
-                      Colors.pink.withOpacity(0.90), AppColors.blue, // Pink
-                    ],
-                    radius: 0.5,
-                    tileMode: TileMode.clamp,
-                    // Adjust the radius as needed
-                    center: Alignment
-                        .centerRight, // Set the center of the gradient to top-left
-                    stops: [0.2, 1.5],
-                    focal: Alignment.centerRight, // Set stops for colors
-                  ),
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
                 child: Column(
                   children: [
@@ -68,7 +56,7 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.white2)),
+                                color: Theme.of(context).colorScheme.secondaryContainer)),
                       ],
                     ),
                     Container(
@@ -158,11 +146,12 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.white2)),
+                            color: Theme.of(context).colorScheme.secondaryContainer)),
                     // GridView for different diamond shapes
                     GridView.count(
                       shrinkWrap: true,
                       crossAxisCount: 3,
+                      
                       physics: NeverScrollableScrollPhysics(),
                       children: [
                         // Shape: HT
@@ -264,7 +253,7 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.white2)),
+                            color: Theme.of(context).colorScheme.secondaryContainer)),
                     GridView.count(
                       shrinkWrap: true,
                       crossAxisCount: 3,
@@ -316,7 +305,7 @@ class _StockManagementScreenState extends State<StockManagementScreen> {
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.white2)),
+                            color: Theme.of(context).colorScheme.secondaryContainer)),
                     GridView.count(
                       shrinkWrap: true,
                       crossAxisCount: 3,
@@ -437,7 +426,7 @@ class DiamondGridItem extends StatelessWidget {
       margin: EdgeInsets.all(8.0),
       padding: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: Theme.of(context).colorScheme.inversePrimary,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
@@ -445,7 +434,7 @@ class DiamondGridItem extends StatelessWidget {
         children: [
           Text(
             shape,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.background),
           ),
           SizedBox(height: 8),
           FutureBuilder<int>(
@@ -457,7 +446,7 @@ class DiamondGridItem extends StatelessWidget {
                 final count = snapshot.data ?? 0;
                 return Text(
                   'Total: $count',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.background),
                 );
               }
             },
@@ -478,22 +467,7 @@ class DiamondColorGridItem extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(8.0),
       padding: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        gradient: RadialGradient(
-          focalRadius: 0.5,
-          colors: [
-            // Dark blue
-            Color.fromARGB(255, 30, 111, 233).withOpacity(0.90),
-            AppColors.white, // Pink
-          ],
-          radius: 0.5,
-          transform: GradientRotation(3.14 / 2),
-          // Adjust the radius as needed
-          center: Alignment
-              .centerRight, // Set the center of the gradient to top-left
-          stops: [0.2, 1.5],
-          focal: Alignment.centerRight, // Set stops for colors
-        ),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.inversePrimary,
         //color: AppColors.primaryAppColor,
         borderRadius: BorderRadius.circular(8.0),
       ),
@@ -505,7 +479,7 @@ class DiamondColorGridItem extends StatelessWidget {
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.white2),
+                color: Theme.of(context).colorScheme.secondaryContainer),
           ),
           SizedBox(height: 8),
           FutureBuilder<int>(
@@ -514,14 +488,14 @@ class DiamondColorGridItem extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Container(
                   child: LoadingAnimationWidget.waveDots(
-                      color: Colors.white, size: 50),
+                      color: Theme.of(context).colorScheme.background, size: 50),
                 );
               } else {
                 final count = snapshot.data ?? 0;
                 return Text(
                   'Total: $count',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: AppColors.white2),
+                      fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondaryContainer),
                 );
               }
             },
@@ -543,21 +517,7 @@ class DiamondTypeGridItem extends StatelessWidget {
       margin: EdgeInsets.all(8.0),
       padding: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        gradient: RadialGradient(
-          focalRadius: 0.5,
-          colors: [
-            // Dark blue
-            AppColors.primaryAppColor.withOpacity(0.90),
-            AppColors.white, // Pink
-          ],
-          radius: 0.5,
-          transform: GradientRotation(3.14 / 2),
-          // Adjust the radius as needed
-          center: Alignment
-              .centerRight, // Set the center of the gradient to top-left
-          stops: [0.2, 1.5],
-          focal: Alignment.centerRight, // Set stops for colors
-        ),
+        color: Theme.of(context).colorScheme.inversePrimary,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
@@ -568,7 +528,7 @@ class DiamondTypeGridItem extends StatelessWidget {
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.white2),
+                color: Theme.of(context).colorScheme.background),
           ),
           SizedBox(height: 8),
           FutureBuilder<int>(
@@ -581,7 +541,7 @@ class DiamondTypeGridItem extends StatelessWidget {
                 return Text(
                   'Total: $count',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: AppColors.white2),
+                      fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.background,)
                 );
               }
             },
@@ -603,7 +563,7 @@ class DiamondclarityGridItem extends StatelessWidget {
       margin: EdgeInsets.all(8.0),
       padding: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: Theme.of(context).colorScheme.inversePrimary,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
@@ -611,7 +571,7 @@ class DiamondclarityGridItem extends StatelessWidget {
         children: [
           Text(
             clarity,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.background),
           ),
           SizedBox(height: 8),
           FutureBuilder<int>(
@@ -623,7 +583,7 @@ class DiamondclarityGridItem extends StatelessWidget {
                 final count = snapshot.data ?? 0;
                 return Text(
                   'Total: $count',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.background),
                 );
               }
             },

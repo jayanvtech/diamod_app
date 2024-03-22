@@ -1,8 +1,11 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:diamond_app/Provider/theme_changer.dart';
 import 'package:diamond_app/database/database_helper.dart';
 import 'package:diamond_app/database/diamond_data.dart';
 import 'package:diamond_app/database/stock_database.dart';
 import 'package:diamond_app/utils/bottom_app_navigationbar.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:diamond_app/utils/theme/theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,8 +18,8 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _requestStoragePermission();
 
-  //await DatabaseHelper().initDatabase();
-  //await DataManager().fetchDataAndStore();
+  await DatabaseHelper().initDatabase();
+  await DataManager().fetchDataAndStore();
   // await StockDatabaseHelper().initDatabase();
   await Permission.manageExternalStorage.request();
   await AwesomeNotifications().initialize(null, [
@@ -67,20 +70,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      // themeMode: uselightMode ? ThemeMode.light : ThemeMode.dark,
-      theme: ThemeData(
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        colorSchemeSeed: AppColors.primaryAppColor,
-        useMaterial3: true,
-      ),
-      //brightness: Brightness.dark),
-      home: ChangeNotifierProvider(
-        create: (context) => DiamondProvider(),
-        child: MyHomePage(),
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeChanger()),],
+      child: Builder(builder: (BuildContext context){
+        final themeChanger = Provider.of<ThemeChanger>(context);
+        return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+       
+         theme: lightTheme, 
+        darkTheme: darkTheme,
+        themeMode: themeChanger.themeMode,
+        
+        home: ChangeNotifierProvider(
+          create: (context) => DiamondProvider(),
+          child: const MyHomePage(),
+        ),
+      );
+      },)
     );
   }
 }
@@ -88,11 +96,11 @@ class MyApp extends StatelessWidget {
 class DiamondProvider with ChangeNotifier {
   List<Diamond> _diamonds = [];
   bool _isLoading = true;
+
   List<Diamond> get diamonds => _diamonds;
   bool get isLoading => _isLoading;
 
   void loadDiamonds() async {
-    print("Loading Diamonds");
     final Database db = await DBHelper.initDB();
     _diamonds = await DBHelper.getDiamonds(db);
     _isLoading = false;

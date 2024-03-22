@@ -1,6 +1,6 @@
 import 'package:diamond_app/screens/Authentication/Api%20Services/auth_api_service.dart';
 import 'package:diamond_app/screens/Authentication/login_screen.dart';
-import 'package:diamond_app/screens/certificate_generate_screen.dart';
+import 'package:diamond_app/screens/certificates/certificate_generate_screen.dart';
 import 'package:diamond_app/screens/home_screen.dart';
 import 'package:diamond_app/screens/profile_screen.dart';
 import 'package:diamond_app/screens/setting/settings_page.dart';
@@ -22,7 +22,7 @@ class _DrawerMenuScreenState extends State<DrawerMenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(color: AppColors.blue),
+        decoration: BoxDecoration(color: Theme.of(context).colorScheme.tertiary),
         child: AnimatedContainer(
           padding: EdgeInsets.all(10),
           duration: const Duration(milliseconds: 300),
@@ -37,7 +37,9 @@ class _DrawerMenuScreenState extends State<DrawerMenuScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.25,
               ),
-              Divider(),
+              Divider(
+                color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5),
+              ),
               // ListTile(
               //   title: Text('Logout', style: TextStyle(color: Colors.white)),
               //   onTap: () {
@@ -52,12 +54,12 @@ class _DrawerMenuScreenState extends State<DrawerMenuScreen> {
               //   },
               // ),
               Text(" Version 1.0.0",
-                  style: TextStyle(color: AppColors.white2.withOpacity(0.5))),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5))),
               Text("© 2024 Diamond App",
-                  style: TextStyle(color: AppColors.white2.withOpacity(0.5))),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5))),
               Text(
                 " Powered By ANVTECH, All rights  reserved",
-                style: TextStyle(color: AppColors.white2.withOpacity(0.5)),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5)),
               )
             ],
           ),
@@ -81,16 +83,16 @@ class _DrawerMenuScreenState extends State<DrawerMenuScreen> {
                 duration: Duration(milliseconds: 300),
                 curve: Curves.fastOutSlowIn,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
           ListTile(
             hoverColor: AppColors.blue,
-            title: Text(title, style: TextStyle(color: Colors.white)),
+            title: Text(title, style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer)),
             onTap: () {
-              setState(() {
+              setState(() {                
                 isActive = true;
                 selectedItemIndex = index;
                 if (index == 0) {
@@ -112,6 +114,9 @@ class _DrawerMenuScreenState extends State<DrawerMenuScreen> {
                           builder: (context) => CertificateGeneratePage()));
                 }
                 if (index == 4) {
+
+
+                  
                   RefreshIndicator(
                     onRefresh: () async {
                       await Future.delayed(Duration(seconds: 3));
@@ -119,8 +124,7 @@ class _DrawerMenuScreenState extends State<DrawerMenuScreen> {
                     child: FutureBuilder<void>(
                       future: fetchDataAndStore(context),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.none ||
-                            snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState == ConnectionState.none) {
                           return CircularProgressIndicator();
                         } else {
                           return Container();

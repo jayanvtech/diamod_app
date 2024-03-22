@@ -19,7 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: AppColors.white2,
+        foregroundColor: Theme.of(context).colorScheme.secondaryContainer,
         actions: [
           IconButton(
               onPressed: () {
@@ -58,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 60,
-                          backgroundColor: AppColors.white2,
+                          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
                           child: Icon(
                             Icons.person,
                             color: AppColors.blue,
@@ -126,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onPressed: () {},
                                   child: Text(
                                     "Edit Profile",
-                                    style: TextStyle(color: AppColors.white2),
+                                    style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                                   ))),
                           SizedBox(
                             width: 10,
@@ -151,7 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   child: Text(
                                     "Share Profile",
-                                    style: TextStyle(color: AppColors.white2),
+                                    style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                                   ))),
                           SizedBox(
                             width: 10,
@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: 10,
               ),
               Divider(
-                color: AppColors.white2,
+                color: Theme.of(context).colorScheme.secondaryContainer,
               ),
               SizedBox(
                 height: 10,
@@ -199,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     '$i',
                                     style: TextStyle(
                                         fontSize: 16.0,
-                                        color: AppColors.white2,
+                                        color: Theme.of(context).colorScheme.secondaryContainer,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -232,15 +232,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ListTile(
                       leading: Icon(
                         Icons.person,
-                        color: AppColors.white2,
+                        color: Theme.of(context).colorScheme.secondaryContainer,
                       ),
                       title: Text(
                         'My Profile',
-                        style: TextStyle(color: AppColors.white2),
+                        style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                       ),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
-                        color: AppColors.white2,
+                        color: Theme.of(context).colorScheme.secondaryContainer,
                       ),
                     ),
                   ],

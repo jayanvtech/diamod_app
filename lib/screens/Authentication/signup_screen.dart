@@ -91,7 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       backgroundColor: AppColors.blue,
       appBar: AppBar(
-        foregroundColor: AppColors.white2,
+        foregroundColor: Theme.of(context).colorScheme.secondaryContainer,
         backgroundColor: AppColors.blue,
         title: Text('Sign Up'),
       ),
@@ -105,7 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 TextFormField(
                   controller: _usernameController,
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   decoration: InputDecoration(
                     labelText: 'Username',
                     fillColor: AppColors.white,
@@ -125,7 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 16.0),
                 TextFormField(
                   controller: _emailController,
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   decoration: InputDecoration(
                     labelText: 'Email',
                     fillColor: AppColors.white,
@@ -151,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(
                       child: TextFormField(
                         controller: _firstNameController,
-                        style: TextStyle(color: AppColors.white2),
+                        style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                         decoration: InputDecoration(
                           labelText: 'First Name',
                           fillColor: AppColors.white,
@@ -174,7 +174,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(
                       child: TextFormField(
                         controller: _lastNameController,
-                        style: TextStyle(color: AppColors.white2),
+                        style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                         decoration: InputDecoration(
                           labelText: 'Last Name',
                           fillColor: AppColors.white,
@@ -197,7 +197,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 16.0),
                 TextFormField(
                   controller: _passwordController,
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   decoration: InputDecoration(
                     labelText: 'Password',
                     fillColor: AppColors.white,
@@ -218,7 +218,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 16.0),
                 TextFormField(
                   controller: _passwordCheckController,
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   decoration: InputDecoration(
                     labelText: 'Re-enter Password',
                     fillColor: AppColors.white,
@@ -239,7 +239,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 16.0),
                 TextFormField(
                   controller: _mobileController,
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   decoration: InputDecoration(
                     labelText: 'Mobile Number',
                     fillColor: AppColors.white,
@@ -259,7 +259,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 16.0),
                 TextFormField(
                   controller: _locationController,
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   decoration: InputDecoration(
                     labelText: 'Location',
                     fillColor: AppColors.white,
@@ -279,7 +279,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: 16.0),
                 TextFormField(
                   controller: _dobController,
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   decoration: InputDecoration(
                     labelText: 'Date of Birth',
                     fillColor: AppColors.white,
@@ -311,7 +311,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     child: Text(
                       'Sign Up',
-                      style: TextStyle(color: AppColors.white2),
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                     ),
                   ),
                 ),

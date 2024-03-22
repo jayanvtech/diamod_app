@@ -123,7 +123,7 @@ print(responseData);
       backgroundColor: AppColors.blue,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        foregroundColor: AppColors.white2,
+        foregroundColor: Theme.of(context).colorScheme.secondaryContainer,
         backgroundColor: AppColors.blue,
         title: Text('Login'),
       ),
@@ -137,7 +137,7 @@ print(responseData);
               children: [
                 TextFormField(
                   controller: _emailController,
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   decoration: InputDecoration(
                     labelText: 'Email',
                     fillColor: AppColors.white,
@@ -156,7 +156,7 @@ print(responseData);
                 ),
                 SizedBox(height: 16.0),
                 TextFormField(
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   controller: _passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
@@ -181,7 +181,7 @@ print(responseData);
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryAppColor
-                        // primary: AppColors.white2,
+                        // primary: Theme.of(context).colorScheme.secondaryContainer,
                         ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -194,7 +194,7 @@ print(responseData);
                       }
                     },
                     child: Text('Login',
-                        style: TextStyle(color: AppColors.white2)),
+                        style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer)),
                   ),
                 ),
                 SizedBox(height: 8.0),
@@ -204,7 +204,7 @@ print(responseData);
                   },
                   child: Text(
                     'Forgot Password?',
-                    style: TextStyle(color: AppColors.white2),
+                    style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                   ),
                 ),
                 SizedBox(height: 8.0),

@@ -47,7 +47,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
       backgroundColor: AppColors.blue,
       appBar: AppBar(
         backgroundColor: AppColors.blue,
-        foregroundColor: AppColors.white2,
+        foregroundColor: Theme.of(context).colorScheme.secondaryContainer,
         title: Text('Diamond Details'),
         actions: [
           IconButton(
@@ -66,7 +66,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                 child: Text(
                   'No diamonds found.',
                   style: TextStyle(
-                    color: AppColors.white2,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
                     fontSize: 18,
                   ),
                 ),
@@ -125,7 +125,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
             children: [
               Text(
                 'SNo: ${diamond.stockNum}',
-                style: TextStyle(color: AppColors.white2),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
               ),
               InkWell(
                 onTap: () {
@@ -134,7 +134,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                 },
                 child: Text(
                   'Cert No: ${diamond.certNum}',
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                 ),
               ),
             ],
@@ -171,15 +171,15 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
             children: [
               Text(
                 'Size: ${diamond.size}',
-                style: TextStyle(color: AppColors.white2),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
               ),
               Text(
                 'Color: ${diamond.color}',
-                style: TextStyle(color: AppColors.white2),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
               ),
               Text(
                 'Rap Price: ${diamond.rapPrice}',
-                style: TextStyle(color: AppColors.white2),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
               ),
             ],
           ),
@@ -188,11 +188,11 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
             children: [
               Text(
                 'Shape: ${diamond.shape}',
-                style: TextStyle(color: AppColors.white2),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
               ),
               Text(
                 'Clarity: ${diamond.clarity}',
-                style: TextStyle(color: AppColors.white2),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
               ),
             ],
           ),
@@ -211,7 +211,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
               Text(
                 '${diamond.availability}',
                 style: TextStyle(
-                  color: AppColors.white2,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),

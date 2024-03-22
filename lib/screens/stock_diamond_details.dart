@@ -45,10 +45,10 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
     List<DiamondData> filteredDiamonds = filterDiamonds();
 
     return Scaffold(
-      backgroundColor: AppColors.blue,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       appBar: AppBar(
-        backgroundColor: AppColors.blue,
-        foregroundColor: AppColors.white2,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        foregroundColor: Theme.of(context).colorScheme.primary,
         title: Text('Diamond Details'),
         actions: [
           IconButton(
@@ -67,7 +67,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                 child: Text(
                   'No diamonds found.',
                   style: TextStyle(
-                    color: AppColors.white2,
+                    color: Theme.of(context).colorScheme.primary,
                     fontSize: 18,
                   ),
                 ),
@@ -113,10 +113,8 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
     return Container(
       padding: EdgeInsets.all(15.0),
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(color: AppColors.primaryAppColor),
-        ],
-        color: AppColors.white,
+       
+        color: Theme.of(context).colorScheme.onSecondary,
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Column(
@@ -127,7 +125,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
             children: [
               Text(
                 'SNo: ${diamond.stockNum}',
-                style: TextStyle(color: AppColors.white2),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
               ),
               InkWell(
                 onTap: () {
@@ -136,7 +134,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                 },
                 child: Text(
                   'Cert No: ${diamond.certNum}',
-                  style: TextStyle(color: AppColors.white2),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                 ),
               ),
               // SwitchApp()
@@ -148,7 +146,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  boxShadow: [BoxShadow(color: AppColors.primaryAppColor)],
+                  boxShadow: [BoxShadow(color: Theme.of(context).colorScheme.primary)],
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 height: 100,
@@ -163,7 +161,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                       } else {
                         return Center(
                             child: LoadingAnimationWidget.stretchedDots(
-                          color: AppColors.white2,
+                          color: Theme.of(context).colorScheme.secondaryContainer,
                           size: 20,
                         ));
                       }
@@ -173,7 +171,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                         height: 100,
                         scale: 2,
                         'assests/imagenotfound.png',
-                        color: AppColors.white2,
+                        color: Theme.of(context).colorScheme.background,
                       );
                     },
                     diamond.imageUrl ?? "assests/imagenotfound.png",
@@ -194,11 +192,11 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                         children: [
                           Text(
                             'Size: ${diamond.size}',
-                            style: TextStyle(color: AppColors.white2),
+                            style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                           ),
                           Text(
                             'Color: ${diamond.color}',
-                            style: TextStyle(color: AppColors.white2),
+                            style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                           ),
                         ],
                       ),
@@ -207,18 +205,18 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                         children: [
                           Text(
                             'Shape: ${diamond.shape}',
-                            style: TextStyle(color: AppColors.white2),
+                            style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                           ),
                           Text(
                             'Clarity: ${diamond.clarity}',
-                            style: TextStyle(color: AppColors.white2),
+                            style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                           ),
                         ],
                       ),
                       Text(
                         'Rap Price: ${diamond.rapPrice}',
                         style: TextStyle(
-                            color: AppColors.white2,
+                            color: Theme.of(context).colorScheme.secondaryContainer,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),
@@ -233,11 +231,11 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: ElevatedButton(
+                child: ElevatedButton(style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
                   onPressed: () {
                     Get.to(() => ViewDiamondDetailsPage(diamond: diamond));
                   },
-                  child: Text('View More'),
+                  child: Text('View More',style: TextStyle(color:Theme.of(context).colorScheme.background),),
                 ),
               ),
               //add to cart
@@ -245,7 +243,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
               Text(
                 '${diamond.availability}',
                 style: TextStyle(
-                  color: AppColors.white2,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -264,10 +262,10 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
         builder: (BuildContext context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: AppColors.blue,
+              backgroundColor: Theme.of(context).colorScheme.background,
               title: Text(
                 'Filters',
-                style: TextStyle(color: AppColors.white2),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
               ),
               content: SingleChildScrollView(
                 child: Column(
@@ -311,7 +309,7 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(color: AppColors.white2)),
+        Text(title, style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer)),
         Wrap(
           spacing: 8.0,
           children: options.map((option) {
@@ -333,19 +331,18 @@ class _DiamondDetailsPageState extends State<DiamondDetailsPage> {
                 });
               },
               selectedColor:
-                  Colors.green, // Add this line to change color when selected
+                  Theme.of(context).colorScheme.primary, // Add this line to change color when selected
               checkmarkColor:
                   Colors.white, // Add this line to change checkmark color
               labelStyle: TextStyle(
                 color: selectedOptions.contains(option)
                     ? Colors.white
-                    : Colors
-                        .black, // Add this line to change text color based on selection
+                    : Theme.of(context).colorScheme.secondaryContainer, // Add this line to change text color based on selection
               ),
 
               backgroundColor: selectedOptions.contains(option)
                   ? Colors.blue
-                  : AppColors.white2,
+                  : Theme.of(context).colorScheme.onSecondary,
               // Add this line to change background color based on selection
             );
           }).toList(),

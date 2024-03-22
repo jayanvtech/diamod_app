@@ -3,9 +3,10 @@ import 'package:diamond_app/database/diamond_data.dart';
 import 'package:diamond_app/features/drawer_menu_screen.dart';
 import 'package:diamond_app/features/spotrate_widget.dart';
 import 'package:diamond_app/main.dart';
-import 'package:diamond_app/screens/certificate_generate_screen.dart';
+import 'package:diamond_app/screens/certificates/certificate_generate_screen.dart';
 import 'package:diamond_app/utils/app_colors.dart';
 import 'package:diamond_app/utils/bottom_app_navigationbar.dart';
+import 'package:diamond_app/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +44,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return _isRefreshing
         ? Center(
             child: LoadingAnimationWidget.prograssiveDots(
-            color: AppColors.white2,
+            color: Theme.of(context).colorScheme.secondaryContainer,
             size: 30,
           ))
         : Scaffold(
@@ -52,11 +53,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
               physics: NeverScrollableScrollPhysics(),
               slivers: [
                 SliverAppBar(
-                  foregroundColor: AppColors.white2,
+                  foregroundColor:
+                      Theme.of(context).colorScheme.secondaryContainer,
+
                   //  shadowColor: Colors.deepOrange,
                   centerTitle: false,
                   elevation: 0,
-                  backgroundColor: Color.fromARGB(255, 3, 0, 26),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   actions: [
                     TextButton(
                       onPressed: () {},
@@ -107,7 +110,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 }
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -186,20 +189,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.blue,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        // backgroundColor: AppColors.blue,
         appBar: AppBar(
           centerTitle: false,
           elevation: 0,
-          foregroundColor: AppColors.white2,
-          backgroundColor: Color.fromARGB(255, 3, 0, 26),
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor: Theme.of(context).colorScheme.onBackground,
           actions: [
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                "Natural",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            IconButton(
+                onPressed: () {
+                  
+                },
+                icon: Icon(Icons.diamond_outlined, color: Theme.of(context).colorScheme.onPrimary)),
             TextButton(
               onPressed: () {},
               child: Text(
@@ -209,47 +211,46 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             IconButton(
               onPressed: () async {
-                if(mounted){setState(() {
-                  
-                  _isRefreshing = true;
-                      
-                });}
-                
-                 try {
-                   fetchDataAndStore(context);
-                   print("object");
-                 } catch (e) {
-                   print(e.toString());
-                 }
-                 
-            await Future.delayed(const Duration(milliseconds: 5000));
+                if (mounted) {
+                  setState(() {
+                    _isRefreshing = true;
+                  });
+                }
+
+                try {
+                  fetchDataAndStore(context);
+                  print("object");
+                } catch (e) {
+                  print(e.toString());
+                }
+
+                await Future.delayed(const Duration(milliseconds: 5000));
                 setState(() {
                   _isRefreshing = false;
                 });
               },
               icon: Icon(
                 Icons.refresh,
-                color: Colors.white,
               ),
             ),
           ],
-          actionsIconTheme: IconThemeData(color: AppColors.primaryAppColor),
+          actionsIconTheme:
+              IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
           shadowColor: Colors.transparent,
+          scrolledUnderElevation: 0,
           title: Text(
             'Calculator',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ),
         drawer: Drawer(
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           child: DrawerMenuScreen(),
         ),
-
-       
-
         body: _isRefreshing
             ? Center(
                 child: LoadingAnimationWidget.prograssiveDots(
-                color: AppColors.white2,
+                color: Theme.of(context).colorScheme.secondaryContainer,
                 size: 50,
               ))
             : KeyboardDismisser(
@@ -261,12 +262,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: AppColors.blue,
+                      color: Theme.of(context).colorScheme.background,
+
+                      // color: Theme.of(context).colorScheme.background,
                       // gradient: LinearGradient(
                       //   colors: [
                       //     AppColors.primaryAppColor
                       //         .withOpacity(0.000000000000000000001),
-                      //     AppColors.white2,
+                      //     Theme.of(context).colorScheme.secondaryContainer,
                       //   ],
                       //   begin: Alignment.topCenter,
                       //   end: Alignment.bottomCenter,
@@ -280,11 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(height: 20),
                           Container(
                             decoration: BoxDecoration(
-                              color:
-                                  AppColors.primaryAppColor.withOpacity(0.12),
-                              border: Border.all(
-                                  color:
-                                      const Color.fromARGB(0, 158, 158, 158)),
+                              color: Theme.of(context).colorScheme.onSecondary,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: TextFormField(
@@ -292,39 +291,55 @@ class _HomeScreenState extends State<HomeScreen> {
                               textAlign: TextAlign.start,
                               autovalidateMode: AutovalidateMode.always,
                               style: TextStyle(
-                                color: AppColors.textColor,
+                                color: Theme.of(context).colorScheme.primary,
                                 height: 0.8,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                               decoration: InputDecoration(
-                                  prefixIconColor: AppColors.primaryAppColor,
-                                  labelText: 'Carat',
-                                  labelStyle: TextStyle(
-                                    color: AppColors.textColor,
+                                prefixIconColor:
+                                    Theme.of(context).colorScheme.primary,
+                                labelText: 'Carat',
+                                labelStyle: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                prefixIcon: Icon(Icons.diamond),
+                                suffixText: "Ct.",
+                                suffixIconColor:
+                                    Theme.of(context).colorScheme.primary,
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.delete_forever),
+                                  onPressed: () {
+                                    setState(() {
+                                      formKey.currentState?.reset();
+                                      selectedCarat = 0.0;
+                                      _updatePrice();
+                                    });
+                                  },
+                                ),
+                                hintText: "0",
+                                hintStyle: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                //color: Colors.black, ),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
-                                  prefixIcon: Icon(Icons.diamond),
-                                  suffixText: "Ct.",
-                                  suffixIconColor: AppColors.primaryAppColor,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(Icons.delete_forever),
-                                    onPressed: () {
-                                      setState(() {
-                                        formKey.currentState?.reset();
-                                        selectedCarat = 0.0;
-                                        _updatePrice();
-                                      });
-                                    },
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
                                   ),
-                                  hintText: "0",
-                                  hintStyle: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textColor,
-                                  ),
-                                  //color: Colors.black, ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10))),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
                               keyboardType: TextInputType.numberWithOptions(
                                 decimal: true,
                                 signed: false,
@@ -341,54 +356,59 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 20,
                           ),
                           Container(
-                            padding: EdgeInsets.all(1),
+                            padding: EdgeInsets.all(0),
                             decoration: BoxDecoration(
-                              boxShadow: List.filled(
-                                  5, BoxShadow(blurRadius: 5),
-                                  growable: true),
-                              color:
-                                  AppColors.primaryAppColor.withOpacity(0.16),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                              //color: Theme.of(context).colorScheme.onSecondary,
                               // borderRadius: BorderRadius.circular(10)),
                             ),
                             child: Container(
+                              margin: EdgeInsets.all(0),
                               decoration: BoxDecoration(
-                                // color: Colors.grey[100],
-                                border: Border.all(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(10),
+                                //color: Theme.of(context).colorScheme.onSecondary,
                               ),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  _buildSelector(
-                                      "Shape", shapes, selectedShapeIndex,
-                                      (index) {
-                                    setState(() {
-                                      selectedShapeIndex = index;
-                                      _updatePrice();
-                                    });
-                                  }),
-                                  _buildSelector(
-                                      "Color", colors, selectedColorIndex,
-                                      (index) {
+                                  Container(
+                                    child: _buildSelector("Shape", shapes,
+                                        selectedShapeIndex, context, (index) {
+                                      setState(() {
+                                        selectedShapeIndex = index;
+                                        _updatePrice();
+                                      });
+                                    }),
+                                  ),
+                                  _buildSelector("Color", colors,
+                                      selectedColorIndex, context, (index) {
                                     setState(() {
                                       selectedColorIndex = index;
                                       _updatePrice();
                                     });
                                   }),
                                   _buildSelector("Clarity", clarities,
-                                      selectedClarityIndex, (index) {
+                                      selectedClarityIndex, context, (index) {
                                     setState(() {
                                       selectedClarityIndex = index;
                                       _updatePrice();
                                     });
                                   }),
-                                  _buildDiscountSelector("Discount", (value) {
-                                    setState(() {
-                                      selectedDiscountIndex = value;
-                                      // _updatePrice();
-                                    });
-                                  })
+                                  _buildDiscountSelector(
+                                    "Discount",
+                                    (value) {
+                                      setState(() {
+                                        selectedDiscountIndex = value;
+                                        // _updatePrice();
+                                      });
+                                    },
+                                    context,
+                                  )
                                 ],
                               ),
                             ),
@@ -396,11 +416,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(height: 20),
                           Container(
                             decoration: BoxDecoration(
-                              boxShadow:
-                                  List.filled(5, BoxShadow(blurRadius: 10)),
-                              color:
-                                  AppColors.primaryAppColor.withOpacity(0.18),
+                              color: Theme.of(context).colorScheme.onSecondary,
                               borderRadius: BorderRadius.circular(10),
+                              // border: Border.all(
+                              //     color: Theme.of(context).colorScheme.primary),
                             ),
                             child: Container(
                               padding: EdgeInsets.all(10),
@@ -444,8 +463,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                            color: AppColors.primaryAppColor
-                                                .withOpacity(0.12),
                                             border: Border.all(
                                                 color: Color.fromARGB(
                                                     0, 255, 0, 0)),
@@ -478,21 +495,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: ElevatedButton.icon(
                                       icon: Icon(
                                         Icons.share,
-                                        color: AppColors.white2,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                       ),
                                       label: Text(
                                         'Share',
                                         style: TextStyle(
                                             fontSize: 14,
-                                            color: AppColors.white2),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary),
                                       ),
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10.0),
                                         ),
-                                        backgroundColor:
-                                            AppColors.primaryAppColor,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         elevation: 0,
                                         //primary: Colors.blue,
                                       ),
@@ -527,7 +549,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   "${currentDate.day}/${currentDate.month}/${currentDate.year}";
                                               return AlertDialog(
                                                 backgroundColor: AppColors.blue,
-                                                iconColor: AppColors.white2,
+                                                iconColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondaryContainer,
                                                 title: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -545,8 +569,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         icon: Icon(
                                                           Icons
                                                               .cancel_presentation_sharp,
-                                                          color:
-                                                              AppColors.white2,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .colorScheme
+                                                              .secondaryContainer,
                                                         ))
                                                   ],
                                                 ),
@@ -748,12 +774,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 icon: const Icon(Icons.filter_list),
                                 label: const Text('Generate Certificate'),
                                 style: ElevatedButton.styleFrom(
-                                    foregroundColor: AppColors.white2,
+                                    foregroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     elevation: 0,
-                                    backgroundColor: AppColors.primaryAppColor,
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.primary,
                                     // primary: AppColors.primaryAppColor,
                                     disabledBackgroundColor:
                                         Color.fromARGB(255, 76, 0, 255)),
@@ -785,6 +814,10 @@ class _HomeScreenState extends State<HomeScreen> {
         TextEditingController(text: totalPrice.toString());
 
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        // border: Border.all(color: Theme.of(context).colorScheme.primary),
+      ),
       width: MediaQuery.of(context).size.width * 0.4,
       child: TextFormField(
         textAlign: TextAlign.start,
@@ -792,7 +825,7 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: discountPriceController,
         inputFormatters: [LengthLimitingTextInputFormatter(8)],
         style: TextStyle(
-          color: AppColors.textColor,
+          color: Theme.of(context).colorScheme.primary,
           height: 0.8,
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -802,14 +835,24 @@ class _HomeScreenState extends State<HomeScreen> {
           labelText: title,
           // prefixIcon: Icon(Icons.attach_money, size: 14),
           suffixText: "/Ct.",
-          suffixStyle: TextStyle(fontSize: 12, color: AppColors.textColor),
-          labelStyle: TextStyle(fontSize: 12, color: AppColors.textColor),
+          suffixStyle: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          labelStyle: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primaryAppColor),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+            ),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primaryAppColor),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+            ),
             borderRadius: BorderRadius.circular(10),
           ),
         ),
@@ -831,7 +874,7 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: totalPriceController,
         inputFormatters: [LengthLimitingTextInputFormatter(8)],
         style: TextStyle(
-          color: AppColors.textColor,
+          color: Theme.of(context).colorScheme.primary,
           height: 0.8,
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -841,17 +884,22 @@ class _HomeScreenState extends State<HomeScreen> {
           labelText: title,
           // prefixIcon: Icon(Icons.attach_money, size: 14),
           suffixText: "/Ct.",
-          suffixStyle: TextStyle(fontSize: 12, color: AppColors.textColor),
+          suffixStyle: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           labelStyle: TextStyle(
             fontSize: 12,
-            color: AppColors.textColor,
+            color: Theme.of(context).colorScheme.primary,
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.primaryAppColor),
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.green),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+            ),
             borderRadius: BorderRadius.circular(10),
           ),
         ),
@@ -887,6 +935,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.4,
       child: TextFormField(
+        readOnly: true,
         textAlignVertical: TextAlignVertical.center,
         textAlign: TextAlign.end,
         controller: discountController,
@@ -926,7 +975,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           labelStyle: TextStyle(
             fontSize: 12,
-            color: AppColors.textColor,
+            color: Theme.of(context).colorScheme.primary,
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.red),
@@ -955,7 +1004,7 @@ Widget _buildPriceTextField(
         LengthLimitingTextInputFormatter(5)
       ], // Limit to 5 characters
       style: TextStyle(
-        color: AppColors.textColor,
+        color: Theme.of(context).colorScheme.primary,
         height: 0.8,
         fontSize: 14,
         fontWeight: FontWeight.bold,
@@ -965,9 +1014,9 @@ Widget _buildPriceTextField(
         suffixText: "/Ct.",
         suffixStyle: TextStyle(
           fontSize: 12,
-          color: AppColors.textColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
-        prefixIconColor: AppColors.textColor,
+        prefixIconColor: Theme.of(context).colorScheme.primary,
         prefixIcon: Padding(
           padding: EdgeInsets.only(left: 8, right: 8), // Adjust the padding
           child: Icon(Icons.attach_money, size: 18), // Adjust the size
@@ -975,7 +1024,7 @@ Widget _buildPriceTextField(
         labelText: title,
         labelStyle: TextStyle(
           fontSize: 12,
-          color: AppColors.textColor,
+          color: Theme.of(context).colorScheme.primary,
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue),
@@ -990,58 +1039,64 @@ Widget _buildPriceTextField(
   );
 }
 
-Widget _buildDiscountSelector(String title, ValueChanged<double> onChanged) {
+Widget _buildDiscountSelector(
+    String title, ValueChanged<double> onChanged, BuildContext context) {
   int selectedIndex = (selectedDiscountIndex * 10).toInt() +
       100; // Calculate the selected index for CupertinoPicker
   bool isNegative =
       selectedDiscountIndex < 0; // Check if selected discount is negative
 
   return Expanded(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(height: 10),
-        Text(
-          title,
-          style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryAppColor),
-        ),
-        Container(
-          height: 120,
-          child: CupertinoPicker(
-            scrollController:
-                FixedExtentScrollController(initialItem: selectedIndex),
-            itemExtent: 40,
-            onSelectedItemChanged: (index) {
-              double discount = (index - 100) / 1.0;
-              onChanged(discount);
-            },
-            children: List.generate(201, (index) {
-              double discount = (index - 100) / 1.0;
-              // Adjust the discount value based on whether it's negative or positive
-              if (isNegative) {
-                discount = -discount;
-              }
-              return Center(
-                child: Text(
-                  '${discount.toStringAsFixed(1)}%',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: discount == selectedDiscountIndex
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                    color: discount == selectedDiscountIndex
-                        ? Colors.red
-                        : AppColors.textColor,
-                  ),
-                ),
-              );
-            }),
+    child: Container(decoration: BoxDecoration( color: Theme.of(context).colorScheme.onSecondary,
+      borderRadius: BorderRadius.circular(10)),
+     
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 10),
+          Text(
+            title,
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.secondaryContainer),
           ),
-        ),
-      ],
+          Container(decoration: BoxDecoration(),
+            height: 150,
+            child: CupertinoPicker(
+              // backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              scrollController:
+                  FixedExtentScrollController(initialItem: selectedIndex),
+              itemExtent: 40,
+              onSelectedItemChanged: (index) {
+                double discount = (index - 100) / 1.0;
+                onChanged(discount);
+              },
+              children: List.generate(201, (index) {
+                double discount = (index - 100) / 1.0;
+                // Adjust the discount value based on whether it's negative or positive
+                if (isNegative) {
+                  discount = -discount;
+                }
+                return Center(
+                  child: Text(
+                    '${discount.toStringAsFixed(1)}%',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: discount == selectedDiscountIndex
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color: discount == selectedDiscountIndex
+                          ? Colors.red
+                          : Theme.of(context).colorScheme.secondaryContainer,
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -1053,7 +1108,6 @@ Future<void> _updatePrice() async {
     shapes[selectedShapeIndex],
     colors[selectedColorIndex],
     clarities[selectedClarityIndex],
-    
     selectedCarat,
   );
   priceController.text =
@@ -1061,43 +1115,51 @@ Future<void> _updatePrice() async {
 }
 
 Widget _buildSelector(String title, List<String> items, int selectedIndex,
-    ValueChanged<int> onChanged) {
+    BuildContext context, ValueChanged<int> onChanged) {
   return Expanded(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(height: 10),
-        Text(
-          title,
-          style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryAppColor),
-        ),
-        Container(
-          height: 120,
-          child: CupertinoPicker(
-            itemExtent: 40,
-            onSelectedItemChanged: onChanged,
-            children: items.map((item) {
-              return Center(
-                child: Text(
-                  item,
-                  style: TextStyle(
-                    color: selectedIndex == items.indexOf(item)
-                        ? AppColors.primaryAppColor
-                        : AppColors.textColor,
-                    fontSize: 16,
-                    fontWeight: selectedIndex == items.indexOf(item)
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
-                ),
-              );
-            }).toList(),
+    child: Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onSecondary,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 10),
+          Container(
+            child: Text(
+              title,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.secondaryContainer),
+            ),
           ),
-        ),
-      ],
+          Container(
+            height: 150,
+            child: CupertinoPicker(
+              // backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              itemExtent: 40,
+              onSelectedItemChanged: onChanged,
+              children: items.map((item) {
+                return Center(
+                  child: Text(
+                    item,
+                    style: TextStyle(
+                      color: selectedIndex == items.indexOf(item)
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.secondaryContainer,
+                      fontSize: 20,
+                      fontWeight: selectedIndex == items.indexOf(item)
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }

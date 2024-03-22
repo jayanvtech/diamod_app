@@ -17,7 +17,7 @@ class DiamondDetailsPage extends StatelessWidget {
       backgroundColor: AppColors.blue,
       appBar: AppBar(
         backgroundColor: AppColors.blue,
-        foregroundColor: AppColors.white2,
+        foregroundColor: Theme.of(context).colorScheme.secondaryContainer,
         title: Text('Diamond Details'),
       ),
       body: Container(
@@ -55,7 +55,7 @@ class DiamondDetailsPage extends StatelessWidget {
                       children: [
                         Text(
                           'SNo: ${diamonds[index].stockNum}',
-                          style: TextStyle(color: AppColors.white2),
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                         ),
                         InkWell(
                           onTap: () {
@@ -65,7 +65,7 @@ class DiamondDetailsPage extends StatelessWidget {
                           },
                           child: Text(
                             'Cert No: ${diamonds[index].certNum}',
-                            style: TextStyle(color: AppColors.white2),
+                            style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                           ),
                         ),
                       ],
@@ -99,15 +99,15 @@ class DiamondDetailsPage extends StatelessWidget {
                           children: [
                             Text(
                               'Size: ${diamonds[index].size}',
-                              style: TextStyle(color: AppColors.white2),
+                              style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                             ),
                             Text(
                               'Color: ${diamonds[index].color}',
-                              style: TextStyle(color: AppColors.white2),
+                              style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                             ),
                             Text(
                               'Rap Price: ${diamonds[index].rapPrice}',
-                              style: TextStyle(color: AppColors.white2),
+                              style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                             )
                           ],
                         ),
@@ -116,11 +116,11 @@ class DiamondDetailsPage extends StatelessWidget {
                           children: [
                             Text(
                               'Shape: ${diamonds[index].shape}',
-                              style: TextStyle(color: AppColors.white2),
+                              style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                             ),
                             Text(
                               'Clarity: ${diamonds[index].clarity}',
-                              style: TextStyle(color: AppColors.white2),
+                              style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
                             ),
                           ],
                         ),
@@ -142,7 +142,7 @@ class DiamondDetailsPage extends StatelessWidget {
                         Text(
                           '${diamonds[index].availability}',
                           style: TextStyle(
-                              color: AppColors.white2,
+                              color: Theme.of(context).colorScheme.secondaryContainer,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
                         )
