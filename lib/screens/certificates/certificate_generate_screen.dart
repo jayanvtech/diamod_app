@@ -67,6 +67,8 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
   String verificationDate = "";
   late Database _database;
   int certificateNumber = 0;
+  Future<Database>? _databaseFuture;
+
   @override
   void initState() {
     AwesomeNotifications().setListeners(
@@ -78,11 +80,12 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
         onDismissActionReceivedMethod:
             NotificationController.onDismissActionReceivedMethod);
     super.initState();
-    _initializeDatabase();
+    _databaseFuture = _initializeDatabase();
+   // _initializeDatabase();
   }
 
-  Future<void> _initializeDatabase() async {
-    final Future<Database> database = openDatabase(
+ Future<Database> _initializeDatabase() async {
+     _database = await openDatabase(
       join(await getDatabasesPath(), 'certificate_database.db'),
       onCreate: (db, version) {
         return db.execute(
@@ -91,7 +94,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
       },
       version: 1,
     );
-    _database = await database;
+  return _database;
   }
 
   Future<void> _showHistory(BuildContext context) async {
@@ -200,16 +203,21 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: _initializeDatabase(),
-      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-        return _buildPage(context);
-      },
-    );
-  }
-
+@override
+Widget build(BuildContext context) {
+  return FutureBuilder<Database>(
+    future: _databaseFuture,
+    builder: (BuildContext context, AsyncSnapshot<Database> snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return CircularProgressIndicator(); // Show a loading spinner while waiting
+      } else if (snapshot.hasError) {
+        return Text('Error: ${snapshot.error}'); // Show error message if something went wrong
+      } else {
+        return _buildPage(context); // Show the page if the Future completed successfully
+      }
+    },
+  );
+}
   bool _downloading = false; // Track if the download is in progress
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
@@ -422,7 +430,8 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
                                 await downloadAndSavePDF(
                                     context, certificateNumber);
 
-                                // Update _downloading state after download completes
+                                // Update _downloadin
+                                //g state after download completes
                                 setState(() {
                                   _downloading = false;
                                 });
@@ -790,7 +799,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
         final now = DateTime.now();
         final formatter = DateFormat('h:mm d/MM/yy'); // Adjust format as needed
         final formattedString = formatter.format(now);
-
+      
         // Add downloaded certificate to database
         await _database.insert(
           'certificates',
@@ -836,9 +845,7 @@ class _MyHoCertificateGenerateState extends State<CertificateGeneratePage> {
       throw Exception('Unsupported platform');
     }
   }
-  Widget webView = InAppWebView(
-    initialUrlRequest: URLRequest(url: WebUri('https://www.gia.edu/report-check?reportno=2201265284')
-  ));
+  
 }
 
 class NotificationController {

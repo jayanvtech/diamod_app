@@ -10,6 +10,7 @@ import 'package:diamond_app/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sqflite/sqflite.dart';
@@ -171,13 +172,484 @@ int selectedColorIndex = 0;
 int selectedClarityIndex = 0;
 double selectedCarat = 0.0;
 double selectedDiscountIndex = 0.0;
-
+int _selectedOptionIndex = 0;
 bool _isInitialDataFetched = false;
 TextEditingController priceController = TextEditingController();
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+Gradient _containerGradient = LinearGradient(
+    colors: [Colors.blue, Colors.green], // Initial colors for the gradient
+  );
+  void updateColor(Gradient gradient, int index) {
+    setState(() {
+      _containerGradient = gradient;
+      _selectedOptionIndex = index;
+    });
+  }
 
+  Widget _buildGradientOptions(StateSetter setState) {
+    List<Gradient> gradients = [
+      LinearGradient(colors: [Colors.blue, Colors.green]),
+      LinearGradient(colors: [Colors.blue, Colors.pink]),
+      LinearGradient(colors: [Colors.yellow, Colors.brown]),
+      LinearGradient(colors: [Colors.red, Colors.yellow]),
+      LinearGradient(colors: [Colors.redAccent, Colors.orange]),
+      LinearGradient(colors: [Colors.indigo, Colors.teal]),
+    ];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(
+        gradients.length,
+        (index) => _buildGradientOption(gradients[index], index, setState),
+      ),
+    );
+  }
+
+  Widget _buildGradientOption(
+      Gradient gradient, int index, StateSetter setState) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _containerGradient = gradient;
+          _selectedOptionIndex = index;
+        });
+      },
+      child: Container(
+        width: 50,
+        height: 25,
+        decoration: BoxDecoration(
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: _selectedOptionIndex == index
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: Offset(0, 0),
+                  ),
+                ]
+              : null,
+        ),
+        child: _selectedOptionIndex == index
+            ? Center(
+                child: Icon(
+                  Icons.check,
+                  size: 18,
+                  color: Colors.white,
+                ),
+              )
+            : null,
+      ),
+    );
+  }
+
+ void _showColorPickerBottomSheet(
+    BuildContext context,
+  ) {
+    showModalBottomSheet(
+        backgroundColor: Colors.grey[100],
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              DateTime currentDate = DateTime.now();
+              String formattedDate =
+                  "${currentDate.day}/${currentDate.month}/${currentDate.year}";
+
+              return Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Share",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.cancel_presentation_sharp),
+                            ),
+                          ],
+                        ),
+                        RepaintBoundary(
+                          key: _globalKey,
+                          child: Column(
+                            textDirection: TextDirection.rtl,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // Adjust the radius as needed
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: RichText(
+                                                    textAlign: TextAlign.start,
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 12,
+                                                        color: Colors.black,
+                                                      ),
+
+                                                      // Default style
+                                                      children: [
+                                                        TextSpan(
+                                                          text: "Color\n", //
+                                                        ),
+                                                        TextSpan(
+                                                          text: colors[
+                                                              selectedColorIndex], // Text to be bold
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .normal), // Bold style
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: RichText(
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 12,
+                                                          color: Colors
+                                                              .black), // Default style
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              " Discount\n", // Regular text
+                                                        ),
+                                                        TextSpan(
+                                                          text: selectedDiscountIndex
+                                                              .toStringAsFixed(
+                                                                  2), // Text to be bold
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .normal), // Bold style
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: RichText(
+                                                    textAlign: TextAlign.start,
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 12,
+                                                          color: Colors
+                                                              .black), // Default style
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              "Weight\n", // Regular text
+                                                        ),
+                                                        TextSpan(
+                                                          text: selectedCarat
+                                                              .toString(), // Text to be bold
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .normal), // Bold style
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: RichText(
+                                                    textAlign: TextAlign.start,
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 12,
+                                                          color: Colors
+                                                              .black), // Default style
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              "Shape\n", // Regular text
+                                                        ),
+                                                        TextSpan(
+                                                          text: shapes[
+                                                              selectedShapeIndex], // Text to be bold
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .normal), // Bold style
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: RichText(
+                                                    textAlign: TextAlign.start,
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 12,
+                                                          color: Colors
+                                                              .black), // Default style
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              "Per carat\n", // Regular text
+                                                        ),
+                                                        TextSpan(
+                                                          text:
+                                                              calculateDiscountPrice(), // Text to be bold
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .normal), // Bold style
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: RichText(
+                                                    textAlign: TextAlign.start,
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 12,
+                                                          color: Colors
+                                                              .black), // Default style
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              "Clarity\n", // Regular text
+                                                        ),
+                                                        TextSpan(
+                                                          text: clarities[
+                                                              selectedClarityIndex], // Text to be bold
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .normal), // Bold style
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                gradient: _containerGradient),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w900,
+                                                          fontSize: 14,
+                                                          color: Colors
+                                                              .black), // Default style
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              "Total\n", // Regular text
+                                                        ),
+                                                        TextSpan(
+                                                          text:
+                                                              calculateTotalPrice(), // Text to be bold
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .normal), // Bold style
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w900,
+                                                          fontSize: 14,
+                                                          color: Colors
+                                                              .black), // Default style
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              "Price\n", // Regular text
+                                                        ),
+                                                        TextSpan(
+                                                          text: priceController
+                                                              .text, // Text to be bold
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .normal), // Bold style
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 12,
+                                                        color: Colors
+                                                            .black), // Default style
+                                                    children: [
+                                                      TextSpan(
+                                                        text:
+                                                            "Date:", // Regular text
+                                                      ),
+                                                      TextSpan(
+                                                        text:
+                                                            formattedDate, // Text to be bold
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight
+                                                                .normal), // Bold style
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        _buildGradientOptions(setState),
+                        SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.image),
+                              onPressed: _capturePngAndShare,
+                              label: Text('Share Image'),
+                            ),
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.text_fields),
+                              onPressed: () {
+                                // Build the message to share
+                                String message = ""
+                                    "Stone Weight: ${selectedCarat.toString()} Ct.\n"
+                                    "Shape: ${shapes[selectedShapeIndex]}\n"
+                                    "Color: ${colors[selectedColorIndex]}\n"
+                                    "Clarity: ${clarities[selectedClarityIndex]}\n"
+                                    "Discount: ${selectedDiscountIndex.toStringAsFixed(1)}%\n"
+                                    "Per carat: ${calculateDiscountPrice()}\n"
+                                    "Total: ${calculateTotalPrice()}\n"
+                                    'price:${priceController.text}\n'
+                                    'Date:${formattedDate}';
+
+                                // Share the message using share_plus
+                                Share.share(message);
+                              },
+                              label: Text('Share Text'),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(Colors
+                                        .blueAccent), // Blue background color
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white), // White text color
+                              ),
+                            ),
+                          ],
+                        )
+                      ]));
+            },
+          );
+        });
+  }
   @override
   void initState() {
     super.initState();
@@ -521,15 +993,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       onPressed: () {
                                         if (selectedCarat <= 0) {
                                           // Show a Snackbar indicating that the stone weight needs to be entered
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              backgroundColor: Colors.red,
-                                              content: Text(
-                                                  'Please enter the stone weight.'),
-                                              duration: Duration(seconds: 2),
-                                            ),
-                                          );
+                                          showCustomSnackbar(context, "Error", "Please Enter the stone weight", Icon(Icons.error_outline));
                                         } else {
                                           // Build the message to display in the AlertDialog
                                           // String message = ""
@@ -540,215 +1004,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           //     "Discount: ${selectedDiscountIndex.toStringAsFixed(1)}%";
 
                                           // Show the AlertDialog
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              DateTime currentDate =
-                                                  DateTime.now();
-                                              String formattedDate =
-                                                  "${currentDate.day}/${currentDate.month}/${currentDate.year}";
-                                              return AlertDialog(
-                                                backgroundColor: AppColors.blue,
-                                                iconColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondaryContainer,
-                                                title: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("Share",
-                                                        style: TextStyle(
-                                                            color: AppColors
-                                                                .white2)),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        icon: Icon(
-                                                          Icons
-                                                              .cancel_presentation_sharp,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .colorScheme
-                                                              .secondaryContainer,
-                                                        ))
-                                                  ],
-                                                ),
-                                                content: RepaintBoundary(
-                                                  key: _globalKey,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height: 150,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        gradient:
-                                                            LinearGradient(
-                                                          colors: [
-                                                            Colors.pink,
-                                                            AppColors.blue,
-                                                          ],
-                                                          begin:
-                                                              Alignment.topLeft,
-                                                          end: Alignment
-                                                              .bottomRight,
-                                                        ),
-                                                      ),
-                                                      child: Center(
-                                                        child: Container(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  10),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .end,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Stone Weight\n${selectedCarat.toString()} Ct.",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    "Shape\n${shapes[selectedShapeIndex]}",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    "Color\n${colors[selectedColorIndex]}",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Clarity\n${clarities[selectedClarityIndex]}",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    "Discount\n${selectedDiscountIndex.toStringAsFixed(1)}%",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    "Per carat\n${calculateDiscountPrice()}",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Total\n${calculateTotalPrice()}",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    'price\n${priceController.text}',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    'Date\n${formattedDate}',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: AppColors
-                                                                          .white2,
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed:
-                                                        _capturePngAndShare,
-                                                    child: Text('Share Image'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      // Build the message to share
-                                                      String message = ""
-                                                          "Stone Weight: ${selectedCarat.toString()} Ct.\n"
-                                                          "Shape: ${shapes[selectedShapeIndex]}\n"
-                                                          "Color: ${colors[selectedColorIndex]}\n"
-                                                          "Clarity: ${clarities[selectedClarityIndex]}\n"
-                                                          "Discount: ${selectedDiscountIndex.toStringAsFixed(1)}%\n"
-                                                          "Per carat: ${calculateDiscountPrice()}\n"
-                                                          "Total: ${calculateTotalPrice()}\n"
-                                                          'price:${priceController.text}\n'
-                                                          'Date:${formattedDate}';
-
-                                                      // Share the message using share_plus
-                                                      Share.share(message);
-                                                    },
-                                                    child: Text('Share Text'),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
+                                        _showColorPickerBottomSheet(context
+                                              
+                                        );
+                                          
                                         }
                                       },
                                     ),
@@ -1113,7 +1372,26 @@ Future<void> _updatePrice() async {
   priceController.text =
       matchingDiamonds.map((diamond) => '${diamond.price}').join(', ');
 }
-
+void showCustomSnackbar(
+    BuildContext context,
+    String title,
+    String message,
+    Icon icon,
+  ) {
+    Get.snackbar(
+      titleText:
+          Text(title, style: TextStyle(color: Colors.white, fontSize: 16)),
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      animationDuration: Duration(milliseconds: 500),
+      barBlur: 20,
+      icon: icon,
+      snackStyle: SnackStyle.FLOATING,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      colorText: Colors.white,
+    );
+  }
 Widget _buildSelector(String title, List<String> items, int selectedIndex,
     BuildContext context, ValueChanged<int> onChanged) {
   return Expanded(
@@ -1162,6 +1440,7 @@ Widget _buildSelector(String title, List<String> items, int selectedIndex,
       ),
     ),
   );
+  
 }
 
 Future<void> fetchDataAndStore(BuildContext context) async {

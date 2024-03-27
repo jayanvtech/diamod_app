@@ -9,7 +9,7 @@ class Certificate {
   Certificate({
     required this.certificateNumber,
     required this.filePath,
-    required this.downloadDate,
+    required this.downloadDate, 
   });
 
   Map<String, dynamic> toMap() {
